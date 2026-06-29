@@ -10,7 +10,8 @@
     "test": "npm run build && jest --testTimeout 10000",
     "test:coverage": "npm run build && jest --coverage --testTimeout 10000",
     "validate": "npm run build && zapier-platform validate",
-    "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run validate"
+    "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run validate",
+    "push-zapier": "npm run build && npm prune --omit=dev && zapier-platform push && npm install"
   },
   "engines": {
     "node": ">=v22",
