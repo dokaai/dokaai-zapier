@@ -1,4 +1,4 @@
-import type { OpenApiDocument } from '../openapi/types';
+import type { OpenApiDocument } from '../../openapi/types';
 import { buildAuthenticationFields } from './fields';
 import { buildTestAuthentication } from './test-authentication';
 

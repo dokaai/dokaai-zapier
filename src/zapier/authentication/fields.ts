@@ -1,5 +1,5 @@
-import { usedSecuritySchemeKeys } from '../openapi/security';
-import type { OpenApiDocument } from '../openapi/types';
+import { usedSecuritySchemeKeys } from '../../openapi/security';
+import type { OpenApiDocument } from '../../openapi/types';
 
 type AuthenticationField = {
   key: string;

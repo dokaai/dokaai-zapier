@@ -1,8 +1,9 @@
-const { buildFieldsFromObjectSchema } = require('../../dist/openapi/schema');
-const { discoverZapierCreates } = require('../../dist/openapi/zapier');
-const { buildZapierCreatesFromOpenApi } = require('../../dist/openapi/zapier');
-const { buildAuthentication } = require('../../dist/authentication');
-const spec = require('../../dist/api/index.json');
+const { buildFieldsFromObjectSchema } = require('../../src/openapi/schema');
+const { discoverZapierCreates } = require('../../src/zapier/actions');
+const { buildZapierCreatesFromOpenApi } = require('../../src/zapier/actions');
+const { buildZapierSearchesFromOpenApi } = require('../../src/zapier/searches');
+const { buildAuthentication } = require('../../src/zapier/authentication');
+const spec = require('../../src/api/index.json');
 
 describe('OpenAPI schema adapter', () => {
   it('discovers selected Zapier creates from plain OpenAPI operationIds', () => {
@@ -81,6 +82,26 @@ describe('OpenAPI schema adapter', () => {
         list: false,
       },
     ]);
+  });
+
+  it('uses OpenAPI enum values as Zapier choices for params and body fields', () => {
+    const searches = buildZapierSearchesFromOpenApi(spec, {
+      operationIds: ['getPoolCustomerById'],
+    });
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['triggerNotificationHandler'],
+    });
+    const attributeTypesField =
+      searches.get_pool_customer_by_id.operation.inputFields.find(
+        (field) => field.key === 'attributeTypes',
+      );
+    const modeField =
+      creates.trigger_notification_handler.operation.inputFields.find(
+        (field) => field.key === 'mode',
+      );
+
+    expect(attributeTypesField.choices).toEqual(['all', 'custom', 'app']);
+    expect(modeField.choices).toEqual(['live', 'test']);
   });
 
   it('uses global OpenAPI auth fields for generated requests', async () => {
@@ -219,7 +240,7 @@ describe('OpenAPI schema adapter', () => {
     expect(fieldRequests[0]).toMatchObject({
       method: 'GET',
       params: {
-        attributeTypes: 'all',
+        attributeTypes: 'custom',
         page: '1',
         size: '100',
       },
