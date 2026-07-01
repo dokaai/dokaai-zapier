@@ -4,7 +4,8 @@ export type ZapierFieldType =
   | 'integer'
   | 'number'
   | 'boolean'
-  | 'datetime';
+  | 'datetime'
+  | 'password';
 
 export interface ZapierInputField {
   key: string;
@@ -14,4 +15,7 @@ export interface ZapierInputField {
   required?: boolean;
   list?: boolean;
   altersDynamicFields?: boolean;
+  choices?: unknown;
+  dependsOn?: string[];
+  children?: ZapierInputField[];
 }

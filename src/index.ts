@@ -1,38 +1,29 @@
 import { defineApp } from 'zapier-platform-core';
 import zapier from 'zapier-platform-core';
 
-import { authentication } from './authentication';
+import type { OpenApiDocument } from './openapi/types';
+import { buildZapierCreatesFromOpenApi } from './zapier/actions';
+import { buildAuthentication } from './zapier/authentication';
+import { buildZapierSearchesFromOpenApi } from './zapier/searches';
 import {
-  createCustomerCreate,
-  getCustomerByIdCreate,
-  removeCustomerCreate,
-  updateCustomerCreate,
-} from './features/customers';
-import {
-  addCustomerToTargetAudienceCreate,
-  removeCustomerFromTargetAudienceCreate,
-} from './features/target-audiences';
+  zapierActionOperationIds,
+  zapierSearchOperationIds,
+} from './zapier-operation-ids';
+
+const openApiSpec = require('./api/index.json') as OpenApiDocument;
 
 const app = defineApp({
   version: require('../package.json').version as string,
   platformVersion: zapier.version,
-  authentication,
-  requestTemplate: {
-    params: {},
-    headers: {
-      'x-client-secret': '{{bundle.authData.x-client-secret}}',
-      'x-client-key': '{{bundle.authData.x-client-key}}',
-    },
-  },
-  creates: {
-    [createCustomerCreate.key]: createCustomerCreate,
-    [updateCustomerCreate.key]: updateCustomerCreate,
-    [removeCustomerCreate.key]: removeCustomerCreate,
-    [addCustomerToTargetAudienceCreate.key]: addCustomerToTargetAudienceCreate,
-    [removeCustomerFromTargetAudienceCreate.key]:
-      removeCustomerFromTargetAudienceCreate,
-    [getCustomerByIdCreate.key]: getCustomerByIdCreate,
-  },
+  authentication: buildAuthentication(openApiSpec, {
+    operationIds: zapierActionOperationIds,
+  }),
+  creates: buildZapierCreatesFromOpenApi(openApiSpec, {
+    operationIds: zapierActionOperationIds,
+  }),
+  searches: buildZapierSearchesFromOpenApi(openApiSpec, {
+    operationIds: zapierSearchOperationIds,
+  }),
 });
 
 export = app;
