@@ -4,7 +4,7 @@ import type { Bundle, ZObject } from 'zapier-platform-core';
 import {
   compactInputEntries,
   isRecord,
-  sortProjectIdFirst,
+  sortPriorityFieldsFirst,
 } from '../../core/zapier';
 import {
   authHeaders,
@@ -242,7 +242,7 @@ const buildInputFields = (
   ];
   const bodySchema = operationBodySchema(operation, discovered.bodyRoot);
 
-  return sortProjectIdFirst([
+  return sortPriorityFieldsFirst([
     ...pathParameterFields(operation.parameters),
     ...buildFieldsFromObjectSchema(bodySchema, { exclude: excluded }),
     ...plugins.flatMap((plugin) => plugin.inputFields?.(context) ?? []),

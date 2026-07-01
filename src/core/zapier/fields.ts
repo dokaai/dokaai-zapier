@@ -2,7 +2,12 @@ type FieldWithKey = {
   key?: string;
 };
 
-export const sortProjectIdFirst = <Field>(
+const priorityByFieldKey: Record<string, number> = {
+  projectId: 0,
+  customerPoolId: 1,
+};
+
+export const sortPriorityFieldsFirst = <Field>(
   fields: readonly Field[],
 ): Field[] =>
   [...fields].sort((left, right) => {
@@ -14,12 +19,20 @@ export const sortProjectIdFirst = <Field>(
       typeof right === 'object' && right !== null
         ? (right as FieldWithKey).key
         : undefined;
+    const leftPriority =
+      leftKey === undefined ? undefined : priorityByFieldKey[leftKey];
+    const rightPriority =
+      rightKey === undefined ? undefined : priorityByFieldKey[rightKey];
 
-    if (leftKey === 'projectId') {
-      return rightKey === 'projectId' ? 0 : -1;
+    if (leftPriority !== undefined && rightPriority !== undefined) {
+      return leftPriority - rightPriority;
     }
 
-    if (rightKey === 'projectId') {
+    if (leftPriority !== undefined) {
+      return -1;
+    }
+
+    if (rightPriority !== undefined) {
       return 1;
     }
 

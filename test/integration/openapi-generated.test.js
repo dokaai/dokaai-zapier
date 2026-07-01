@@ -365,8 +365,8 @@ const searchFixtures = [
     "method": "GET",
     "inputFields": [
       "projectId",
-      "customerId",
       "customerPoolId",
+      "customerId",
       "attributeTypes"
     ],
     "inputData": {

@@ -4,7 +4,7 @@ import type { Bundle, ZObject } from 'zapier-platform-core';
 import {
   compactInputEntries,
   isRecord,
-  sortProjectIdFirst,
+  sortPriorityFieldsFirst,
 } from '../../core/zapier';
 import {
   authHeaders,
@@ -108,7 +108,7 @@ const sampleFromOperation = (
 const parameterFields = (
   parameters: readonly OpenApiParameter[] | undefined,
 ): GeneratedInputField[] =>
-  sortProjectIdFirst((parameters ?? [])
+  sortPriorityFieldsFirst((parameters ?? [])
     .filter((parameter) => parameter.in === 'path' || parameter.in === 'query')
     .map((parameter) => {
       const schema = normalizeSchema(parameter.schema);

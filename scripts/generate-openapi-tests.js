@@ -192,13 +192,25 @@ const fieldExample = (key, schema) => {
 const shouldIncludeValue = (value) =>
   value !== undefined && value !== null && value !== '';
 
-const sortProjectIdFirst = (fieldNames) =>
+const priorityFieldOrder = {
+  projectId: 0,
+  customerPoolId: 1,
+};
+
+const sortPriorityFieldsFirst = (fieldNames) =>
   [...fieldNames].sort((left, right) => {
-    if (left === 'projectId') {
-      return right === 'projectId' ? 0 : -1;
+    const leftPriority = priorityFieldOrder[left];
+    const rightPriority = priorityFieldOrder[right];
+
+    if (leftPriority !== undefined && rightPriority !== undefined) {
+      return leftPriority - rightPriority;
     }
 
-    if (right === 'projectId') {
+    if (leftPriority !== undefined) {
+      return -1;
+    }
+
+    if (rightPriority !== undefined) {
       return 1;
     }
 
@@ -365,7 +377,7 @@ const buildOperationFixture = (operationId) => {
     key,
     label: operation.summary || operationId,
     method: method.toUpperCase(),
-    inputFields: sortProjectIdFirst([
+    inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),
       ...queryParams.map((parameter) => parameter.name),
       ...bodyFieldNames,
@@ -425,7 +437,7 @@ const buildSearchFixture = (operationId) => {
     key,
     label: operation.summary || operationId,
     method: method.toUpperCase(),
-    inputFields: sortProjectIdFirst([
+    inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),
       ...queryParams.map((parameter) => parameter.name),
     ]),
