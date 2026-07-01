@@ -1,131 +1,72 @@
 # Architecture
 
+## Source Of Truth
+
+`src/api/index.json` is the source of truth for the Zapier app.
+
+It owns:
+
+- API server URL
+- authentication schemes
+- paths and HTTP methods
+- path parameters
+- request body schemas
+- response schemas
+
+TypeScript code should not contain per-endpoint route builders or per-action
+payload builders for normal REST operations.
+
 ## Module Map
 
 ```text
 src/index.ts
+src/api/index.json
 src/authentication/
-src/config/
-src/core/http/
-src/core/validation/
 src/core/zapier/
-src/features/customers/
-src/features/customer-pools/
-src/features/target-audiences/
+src/openapi/
 ```
 
-`index.js` is only a CommonJS compatibility shim for Zapier CLI. Compiled files are emitted to `dist/`.
+`index.js` is a CommonJS compatibility shim for Zapier CLI. Compiled files are
+emitted to `dist/`.
 
-The Dokaai API base URL is read from the required `DOKAAI_API_BASE_URL` environment variable through `src/config/env.ts`. Do not hard-code the production URL in source modules.
-
-## Dependency Direction
-
-Allowed flow:
+## Runtime Flow
 
 ```text
 src/index.ts
-  -> feature registration modules
-  -> actions/triggers
-  -> feature API + fields + transforms
-  -> core HTTP/validation/Zapier helpers
-  -> config
+  -> load OpenAPI document
+  -> build authentication from securitySchemes
+  -> select create operations by operationId
+  -> generate Zapier inputFields and perform functions
 ```
 
-Rules:
+`src/openapi/zapier.ts` owns operation discovery, URL building, auth headers,
+request body construction, and response id mapping.
 
-- `core/` must not import from `features/`.
-- Features must not import another feature's internals.
-- Cross-feature logic belongs in `core/` only when it is domain-neutral.
-- Feature API functions must not depend on Zapier operation definitions.
-- Payload builders and response transformers stay pure.
-- `src/index.ts` composes the app only.
+`src/openapi/schema.ts` owns JSON Schema normalization and Zapier field mapping.
 
-## Request Lifecycle
+## Adding Capabilities
 
-Feature API functions validate required identifiers, build a path using `src/config/api.ts`, then call `requestDokaaiApi`.
+Prefer extending generic inference in the OpenAPI adapter instead of adding
+feature-specific code or backend-owned Zapier metadata.
 
-`requestDokaaiApi` owns:
+Examples:
 
-- base URL composition from `DOKAAI_API_BASE_URL`
-- auth headers
-- `Accept` header
-- JSON `Content-Type` when a body is present
-- forwarding Zapier request options
+- Need to expose another create: add its `operationId` to the local selector.
+- Need a nested body: the adapter detects a single required object body property.
+- Need to hide backend-managed fields: add a generic exclusion rule in the adapter.
+- Need Zapier's result `id`: the adapter searches success response schemas for `id` fields.
 
-Domain payload shape is not guessed by the HTTP helper.
-
-## Authentication Flow
-
-Authentication is custom API-key auth. The only credential keys are:
-
-- `x-client-key`
-- `x-client-secret`
-
-They are password fields and are sent as headers. Operation outputs and tests must not return credential values.
-
-## Dynamic Customer Fields
-
-The customer attributes endpoint is fetched through `fetchCustomerAttributes`. Field construction is centralized in `buildCustomerFields`.
-
-Create mode:
-
-- includes active, well-formed attributes
-- respects `isMandatory`
-- supports array fields as Zapier list fields
-
-Update mode:
-
-- makes every dynamic field optional
-- excludes `uniqueCustomerId`
-- still relies on the update payload builder to strip `uniqueCustomerId` defensively
-
-Missing `projectId` or `customerPoolId` returns no dynamic fields and avoids an API request.
-
-## Create Versus Update Payloads
-
-Create Customer preserves the converted API contract:
-
-```json
-{
-  "customerData": {
-    "name": "Ada"
-  }
-}
-```
-
-Update Customer sends editable values at the body root:
-
-```json
-{
-  "name": "Updated Name"
-}
-```
-
-Update never wraps in `customerData`, strips routing inputs and `uniqueCustomerId`, preserves `false` and `0`, and rejects empty updates with `MissingUpdateData`.
-
-## Error Policy
-
-Validation errors use stable Zapier error codes such as `MissingProjectId`, `MissingCustomerPoolId`, `MissingCustomerId`, `MissingTargetAudienceListId`, and `MissingUpdateData`.
-
-HTTP status handling uses Zapier response `throwForStatus`. API envelopes are treated as untrusted data and narrowed before use.
-
-Never include authentication secrets in thrown errors, logs, fixtures, or returned operation output.
+If future triggers, searches, dropdowns, pagination, or dynamic fields are
+needed, add generic inference support and tests around the adapter.
 
 ## Testing Strategy
 
-Tests are split by behavior:
+Tests should verify generated behavior:
 
-- pure unit tests for field generation, payload builders, response transforms, and ID normalization
-- operation-level tests with mocked `z.request` for HTTP method, URL encoding, headers, bodies, and errors
+- OpenAPI operation discovery
+- field generation from schemas
+- request method, URL encoding, headers, and body shape
+- auth fields from OpenAPI security schemes
+- response `id` mapping
 
 External API calls are not made during tests.
-
-## Extension Checklist
-
-- Preserve existing operation keys.
-- Add endpoint builders to `src/config/api.ts`.
-- Encode path segments exactly once through config path builders.
-- Keep query parameters such as `attributeTypes` explicit.
-- Add pure payload and response tests.
-- Add operation tests for request method, path, body, headers, and stable `id`.
-- Run `npm run check`.

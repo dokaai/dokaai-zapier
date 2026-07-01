@@ -4,11 +4,12 @@
   "description": "Dokaai is the notification infrastructure for product and engineering teams.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && mkdir -p dist/api && cp src/api/index.json dist/api/index.json",
+    "generate:tests": "node scripts/generate-openapi-tests.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src/**/*.ts",
-    "test": "npm run build && jest --testTimeout 10000",
-    "test:coverage": "npm run build && jest --coverage --testTimeout 10000",
+    "test": "npm run generate:tests && npm run build && jest --testTimeout 10000",
+    "test:coverage": "npm run generate:tests && npm run build && jest --coverage --testTimeout 10000",
     "validate": "npm run build && zapier-platform validate",
     "check": "npm run build && npm run typecheck && npm run lint && npm test && npm run validate",
     "push-zapier": "npm run build && npm prune --omit=dev && zapier-platform push && npm install"
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "@types/node": "^26.0.1",
     "@typescript-eslint/eslint-plugin": "^8.62.0",
     "@typescript-eslint/parser": "^8.62.0",
     "eslint": "^9.39.4",

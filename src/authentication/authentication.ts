@@ -1,10 +1,17 @@
-import { authenticationFields } from './fields';
-import { testAuthentication } from './test-authentication';
+import type { OpenApiDocument } from '../openapi/types';
+import { buildAuthenticationFields } from './fields';
+import { buildTestAuthentication } from './test-authentication';
 
-export const authentication = {
-  type: 'custom',
-  test: testAuthentication,
-  fields: authenticationFields,
-  connectionLabel: 'Dokaai Account',
-  customConfig: {},
-} as const;
+export const buildAuthentication = (
+  document: OpenApiDocument,
+  options: {
+    operationIds?: readonly string[];
+  } = {},
+) =>
+  ({
+    type: 'custom',
+    test: buildTestAuthentication(document),
+    fields: buildAuthenticationFields(document, options.operationIds),
+    connectionLabel: 'Dokaai Account',
+    customConfig: {},
+  }) as const;

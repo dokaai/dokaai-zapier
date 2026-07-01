@@ -35,11 +35,6 @@ module.exports = [
         {
           patterns: [
             {
-              group: ['src/features/*/*'],
-              message:
-                'Do not deep-import another feature; use its public feature index.',
-            },
-            {
               group: ['src/test-support/*', 'test-support/*'],
               message: 'Production code must not import test support.',
             },
