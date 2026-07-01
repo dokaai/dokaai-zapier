@@ -1,7 +1,11 @@
 import { defineInputFields, defineSearch } from 'zapier-platform-core';
 import type { Bundle, ZObject } from 'zapier-platform-core';
 
-import { compactInputEntries, isRecord } from '../../core/zapier';
+import {
+  compactInputEntries,
+  isRecord,
+  sortProjectIdFirst,
+} from '../../core/zapier';
 import {
   authHeaders,
   getOpenApiBaseUrl,
@@ -104,7 +108,7 @@ const sampleFromOperation = (
 const parameterFields = (
   parameters: readonly OpenApiParameter[] | undefined,
 ): GeneratedInputField[] =>
-  (parameters ?? [])
+  sortProjectIdFirst((parameters ?? [])
     .filter((parameter) => parameter.in === 'path' || parameter.in === 'query')
     .map((parameter) => {
       const schema = normalizeSchema(parameter.schema);
@@ -137,7 +141,7 @@ const parameterFields = (
       }
 
       return field;
-    });
+    }));
 
 const buildQueryParams = (
   operation: OpenApiOperation,

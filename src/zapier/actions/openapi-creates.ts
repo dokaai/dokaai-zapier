@@ -1,7 +1,11 @@
 import { defineCreate, defineInputFields } from 'zapier-platform-core';
 import type { Bundle, ZObject } from 'zapier-platform-core';
 
-import { compactInputEntries, isRecord } from '../../core/zapier';
+import {
+  compactInputEntries,
+  isRecord,
+  sortProjectIdFirst,
+} from '../../core/zapier';
 import {
   authHeaders,
   HTTP_METHODS,
@@ -238,11 +242,11 @@ const buildInputFields = (
   ];
   const bodySchema = operationBodySchema(operation, discovered.bodyRoot);
 
-  return [
+  return sortProjectIdFirst([
     ...pathParameterFields(operation.parameters),
     ...buildFieldsFromObjectSchema(bodySchema, { exclude: excluded }),
     ...plugins.flatMap((plugin) => plugin.inputFields?.(context) ?? []),
-  ];
+  ]);
 };
 
 const excludedBodyFields = (

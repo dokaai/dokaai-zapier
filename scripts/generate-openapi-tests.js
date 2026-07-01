@@ -192,6 +192,19 @@ const fieldExample = (key, schema) => {
 const shouldIncludeValue = (value) =>
   value !== undefined && value !== null && value !== '';
 
+const sortProjectIdFirst = (fieldNames) =>
+  [...fieldNames].sort((left, right) => {
+    if (left === 'projectId') {
+      return right === 'projectId' ? 0 : -1;
+    }
+
+    if (right === 'projectId') {
+      return 1;
+    }
+
+    return 0;
+  });
+
 const buildValueFromSchema = (key, schema, inputData, excluded) => {
   const normalized = normalizeSchema(schema);
 
@@ -352,11 +365,11 @@ const buildOperationFixture = (operationId) => {
     key,
     label: operation.summary || operationId,
     method: method.toUpperCase(),
-    inputFields: [
+    inputFields: sortProjectIdFirst([
       ...pathParams.map((parameter) => parameter.name),
       ...queryParams.map((parameter) => parameter.name),
       ...bodyFieldNames,
-    ],
+    ]),
     inputData,
     expectedUrl,
     expectedParams: Object.keys(expectedParams).length ? expectedParams : undefined,
@@ -412,10 +425,10 @@ const buildSearchFixture = (operationId) => {
     key,
     label: operation.summary || operationId,
     method: method.toUpperCase(),
-    inputFields: [
+    inputFields: sortProjectIdFirst([
       ...pathParams.map((parameter) => parameter.name),
       ...queryParams.map((parameter) => parameter.name),
-    ],
+    ]),
     inputData,
     expectedUrl,
     expectedParams: Object.keys(expectedParams).length ? expectedParams : undefined,

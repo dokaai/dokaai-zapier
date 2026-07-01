@@ -10,8 +10,8 @@ const operationFixtures = [
     "label": "Add Customers to Pool",
     "method": "POST",
     "inputFields": [
-      "customerPoolId",
       "projectId",
+      "customerPoolId",
       "uniqueCustomerId",
       "emailId",
       "phoneNumber",
@@ -79,8 +79,8 @@ const operationFixtures = [
     "label": "Create Customer Custom Attribute",
     "method": "POST",
     "inputFields": [
-      "customerPoolId",
       "projectId",
+      "customerPoolId",
       "customAttributes"
     ],
     "inputData": {
@@ -158,9 +158,9 @@ const operationFixtures = [
     "label": "Delete Customer From Target Audience List",
     "method": "PATCH",
     "inputFields": [
+      "projectId",
       "targetAudienceListId",
-      "customerId",
-      "projectId"
+      "customerId"
     ],
     "inputData": {
       "targetAudienceListId": "targetAudienceListId value",
@@ -186,9 +186,9 @@ const operationFixtures = [
     "label": "Update Customer in Pool",
     "method": "PUT",
     "inputFields": [
+      "projectId",
       "customerPoolId",
       "customerId",
-      "projectId",
       "name",
       "countryIsoCode",
       "iosDeviceTokens",
@@ -252,8 +252,8 @@ const operationFixtures = [
     "label": "Remove Customer From Pool",
     "method": "PATCH",
     "inputFields": [
-      "customerPoolId",
       "projectId",
+      "customerPoolId",
       "customerId"
     ],
     "inputData": {
