@@ -17,6 +17,12 @@ import {
   toZapierMethod,
 } from '../../openapi/runtime';
 import { getJsonRequestSchema, normalizeSchema } from '../../openapi/schema';
+import {
+  applyCustomerPoolChoices,
+  applyNotificationHandlerChoices,
+  applyProjectChoices,
+  applyTargetAudienceListChoices,
+} from '../dynamic-fields';
 import type {
   DiscoveredZapierOperation,
   GeneratedInputField,
@@ -106,6 +112,7 @@ const sampleFromOperation = (
 };
 
 const parameterFields = (
+  document: OpenApiDocument,
   parameters: readonly OpenApiParameter[] | undefined,
 ): GeneratedInputField[] =>
   sortPriorityFieldsFirst((parameters ?? [])
@@ -140,7 +147,15 @@ const parameterFields = (
           .map((choice) => choice);
       }
 
-      return field;
+      return [
+        applyProjectChoices,
+        applyCustomerPoolChoices,
+        applyTargetAudienceListChoices,
+        applyNotificationHandlerChoices,
+      ].reduce(
+        (currentField, applyChoices) => applyChoices(document, currentField),
+        field,
+      );
     }));
 
 const buildQueryParams = (
@@ -338,7 +353,7 @@ export const buildZapierSearchesFromOpenApi = (
         operation: {
           perform: performSearch(document, discovered),
           inputFields: defineInputFields(
-            parameterFields(operation.parameters) as never,
+            parameterFields(document, operation.parameters) as never,
           ),
           sample: sampleFromOperation(operation),
         },

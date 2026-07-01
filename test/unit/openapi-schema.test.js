@@ -104,6 +104,304 @@ describe('OpenAPI schema adapter', () => {
     expect(modeField.choices).toEqual(['live', 'test']);
   });
 
+  it('loads customer pools as customerPoolId dropdown choices from projectId', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+    const customerPoolField =
+      creates.add_customers_to_pool.operation.inputFields.find(
+        (field) => typeof field === 'object' && field.key === 'customerPoolId',
+      );
+    const responseJson = {
+      status: 'success',
+      data: [
+        {
+          id: 'pool-1',
+          name: 'Primary Pool',
+        },
+        {
+          id: 'pool-2',
+          name: 'VIP Pool',
+        },
+      ],
+    };
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: responseJson,
+          data: responseJson,
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    const choices = await customerPoolField.choices.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+      },
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+    });
+
+    expect(customerPoolField.dependsOn).toEqual(['projectId']);
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      headers: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+    });
+    expect(requests[0].url).toContain(
+      '/customer/projects/project-id/customer-pools/',
+    );
+    expect(choices).toEqual({
+      results: [
+        {
+          value: 'pool-1',
+          sample: 'pool-1',
+          label: 'Primary Pool',
+        },
+        {
+          value: 'pool-2',
+          sample: 'pool-2',
+          label: 'VIP Pool',
+        },
+      ],
+    });
+  });
+
+  it('loads projects as projectId dropdown choices from fixed service id', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+    const projectField =
+      creates.add_customers_to_pool.operation.inputFields.find(
+        (field) => typeof field === 'object' && field.key === 'projectId',
+      );
+    const responseJson = {
+      status: 'success',
+      data: [
+        {
+          id: 'project-1',
+          name: 'Main Project',
+        },
+        {
+          id: 'project-2',
+          name: 'Sandbox Project',
+        },
+      ],
+    };
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: responseJson,
+          data: responseJson,
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    const choices = await projectField.choices.perform(z, {
+      inputData: {},
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+    });
+
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      params: {
+        page: '1',
+        size: '100',
+      },
+      headers: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+    });
+    expect(requests[0].url).toContain(
+      '/opm/members/me/projects/with-service/',
+    );
+    expect(choices).toEqual({
+      results: [
+        {
+          value: 'project-1',
+          sample: 'project-1',
+          label: 'Main Project',
+        },
+        {
+          value: 'project-2',
+          sample: 'project-2',
+          label: 'Sandbox Project',
+        },
+      ],
+    });
+  });
+
+  it('loads target audience lists as targetAudienceListId dropdown choices', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['associateCustomerToTargetAudienceList'],
+    });
+    const field =
+      creates.associate_customer_to_target_audience_list.operation.inputFields.find(
+        (inputField) =>
+          typeof inputField === 'object' &&
+          inputField.key === 'targetAudienceListId',
+      );
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: {
+            status: 'success',
+            data: [{ id: 'tal-1', name: 'High Intent Customers' }],
+            metaData: { hasMore: true },
+          },
+          data: {
+            status: 'success',
+            data: [{ id: 'tal-1', name: 'High Intent Customers' }],
+            metaData: { hasMore: true },
+          },
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    const choices = await field.choices.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+      },
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+      meta: {
+        paging_token: '2',
+      },
+    });
+
+    expect(field.dependsOn).toEqual(['projectId']);
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      params: {
+        page: '2',
+        size: '100',
+      },
+    });
+    expect(requests[0].url).toContain(
+      '/nudge/projects/project-id/target-audience-lists/',
+    );
+    expect(choices).toEqual({
+      results: [
+        {
+          value: 'tal-1',
+          sample: 'tal-1',
+          label: 'High Intent Customers',
+        },
+      ],
+      paging_token: '3',
+    });
+  });
+
+  it('keeps customerIds as a manual multi-value field', () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['associateCustomerToTargetAudienceList'],
+    });
+    const field =
+      creates.associate_customer_to_target_audience_list.operation.inputFields.find(
+        (inputField) =>
+          typeof inputField === 'object' && inputField.key === 'customerIds',
+      );
+
+    expect(field.list).toBe(true);
+    expect(field.choices).toBeUndefined();
+    expect(field.dependsOn).toBeUndefined();
+  });
+
+  it('loads notification handlers as notificationHandlerId dropdown choices', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['triggerNotificationHandler'],
+    });
+    const field =
+      creates.trigger_notification_handler.operation.inputFields.find(
+        (inputField) =>
+          typeof inputField === 'object' &&
+          inputField.key === 'notificationHandlerId',
+      );
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: {
+            status: 'success',
+            data: [
+              {
+                id: 'row-1',
+                handlerId: 'handler-1',
+                name: 'Welcome Email',
+              },
+            ],
+            metaData: { hasMore: false },
+          },
+          data: {
+            status: 'success',
+            data: [
+              {
+                id: 'row-1',
+                handlerId: 'handler-1',
+                name: 'Welcome Email',
+              },
+            ],
+            metaData: { hasMore: false },
+          },
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    const choices = await field.choices.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+      },
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+      meta: {},
+    });
+
+    expect(field.dependsOn).toEqual(['projectId']);
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      params: {
+        page: '1',
+        size: '100',
+      },
+    });
+    expect(requests[0].url).toContain(
+      '/nudge/projects/project-id/notification-handlers/',
+    );
+    expect(choices).toEqual({
+      results: [
+        {
+          value: 'row-1',
+          sample: 'row-1',
+          label: 'Welcome Email',
+        },
+      ],
+      paging_token: null,
+    });
+  });
+
   it('uses global OpenAPI auth fields for generated requests', async () => {
     const document = {
       openapi: '3.1.0',
@@ -180,7 +478,7 @@ describe('OpenAPI schema adapter', () => {
     });
   });
 
-  it('loads pool customer attributes as dynamic fields and submits them as customAttribute', async () => {
+  it('loads pool customer attributes as dynamic fields and submits them as plain body fields', async () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['addCustomersToPool', 'updateCustomerInPool'],
     });
@@ -254,14 +552,14 @@ describe('OpenAPI schema adapter', () => {
     );
     expect(dynamicFields).toEqual([
       {
-        key: 'customAttribute__vipStatus',
+        key: 'vipStatus',
         label: 'VIP Status',
         type: 'boolean',
         required: true,
         helpText: 'Whether this customer is a VIP.',
       },
       {
-        key: 'customAttribute__lifetimeValue',
+        key: 'lifetimeValue',
         label: 'Lifetime Value',
         type: 'number',
         required: false,
@@ -285,8 +583,8 @@ describe('OpenAPI schema adapter', () => {
         projectId: 'project-id',
         customerPoolId: 'pool-id',
         uniqueCustomerId: 'customer-1',
-        customAttribute__vipStatus: true,
-        customAttribute__lifetimeValue: 42,
+        vipStatus: true,
+        lifetimeValue: 42,
       },
       authData,
     });
@@ -294,10 +592,8 @@ describe('OpenAPI schema adapter', () => {
     expect(addRequests[0].body).toMatchObject({
       customerData: {
         uniqueCustomerId: 'customer-1',
-        customAttribute: {
-          vipStatus: true,
-          lifetimeValue: 42,
-        },
+        vipStatus: true,
+        lifetimeValue: 42,
       },
     });
 
@@ -318,15 +614,13 @@ describe('OpenAPI schema adapter', () => {
         projectId: 'project-id',
         customerPoolId: 'pool-id',
         customerId: 'customer-id',
-        customAttribute__vipStatus: false,
+        vipStatus: false,
       },
       authData,
     });
 
     expect(updateRequests[0].body).toMatchObject({
-      customAttribute: {
-        vipStatus: false,
-      },
+      vipStatus: false,
     });
   });
 });

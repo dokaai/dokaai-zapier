@@ -97,6 +97,7 @@ export interface GeneratedInputField {
   required?: boolean;
   list?: boolean;
   altersDynamicFields?: boolean;
-  choices?: string[];
+  choices?: unknown;
+  dependsOn?: string[];
   children?: GeneratedInputField[];
 }

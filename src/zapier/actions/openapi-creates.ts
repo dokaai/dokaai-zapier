@@ -24,6 +24,12 @@ import {
   getJsonRequestSchema,
   normalizeSchema,
 } from '../../openapi/schema';
+import {
+  applyCustomerPoolChoices,
+  applyNotificationHandlerChoices,
+  applyProjectChoices,
+  applyTargetAudienceListChoices,
+} from '../dynamic-fields';
 import type {
   DiscoveredZapierOperation,
   GeneratedInputField,
@@ -181,6 +187,7 @@ const sampleFromOperation = (
 };
 
 const pathParameterFields = (
+  document: OpenApiDocument,
   parameters: readonly OpenApiParameter[] | undefined,
 ): GeneratedInputField[] =>
   (parameters ?? [])
@@ -215,8 +222,30 @@ const pathParameterFields = (
           .map((choice) => choice);
       }
 
-      return field;
+      return [
+        applyProjectChoices,
+        applyCustomerPoolChoices,
+        applyTargetAudienceListChoices,
+        applyNotificationHandlerChoices,
+      ].reduce(
+        (currentField, applyChoices) => applyChoices(document, currentField),
+        field,
+      );
     });
+
+const applyGeneratedFieldChoices = (
+  document: OpenApiDocument,
+  field: GeneratedInputField,
+): GeneratedInputField =>
+  [
+    applyProjectChoices,
+    applyCustomerPoolChoices,
+    applyTargetAudienceListChoices,
+    applyNotificationHandlerChoices,
+  ].reduce(
+    (currentField, applyChoices) => applyChoices(document, currentField),
+    field,
+  );
 
 const buildInputFields = (
   document: OpenApiDocument,
@@ -241,10 +270,13 @@ const buildInputFields = (
     ),
   ];
   const bodySchema = operationBodySchema(operation, discovered.bodyRoot);
+  const bodyFields = buildFieldsFromObjectSchema(bodySchema, { exclude: excluded });
 
   return sortPriorityFieldsFirst([
-    ...pathParameterFields(operation.parameters),
-    ...buildFieldsFromObjectSchema(bodySchema, { exclude: excluded }),
+    ...pathParameterFields(document, operation.parameters),
+    ...bodyFields.map(
+      (field) => applyGeneratedFieldChoices(document, field),
+    ),
     ...plugins.flatMap((plugin) => plugin.inputFields?.(context) ?? []),
   ]);
 };

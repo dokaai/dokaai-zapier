@@ -11,8 +11,6 @@ import {
 } from '../../openapi/runtime';
 import type { GeneratedInputField, OpenApiDocument } from '../../openapi/types';
 
-export const CUSTOMER_ATTRIBUTE_FIELD_PREFIX = 'customAttribute__';
-
 const mapCustomerAttributeFieldType = (
   fieldType: unknown,
 ): NonNullable<GeneratedInputField['type']> => {
@@ -88,7 +86,7 @@ export const customerPoolAttributeFields =
       }
 
       const field: GeneratedInputField = {
-        key: `${CUSTOMER_ATTRIBUTE_FIELD_PREFIX}${attribute.fieldName}`,
+        key: attribute.fieldName,
         label:
           typeof attribute.fieldDisplayName === 'string'
             ? attribute.fieldDisplayName
