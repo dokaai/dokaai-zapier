@@ -311,6 +311,68 @@ describe('OpenAPI schema adapter', () => {
     });
   });
 
+  it('loads target audience lists as filterOutTALId dropdown choices', async () => {
+    const searches = buildZapierSearchesFromOpenApi(spec, {
+      operationIds: ['getPoolCustomers'],
+    });
+    const field = searches.get_pool_customers.operation.inputFields.find(
+      (inputField) =>
+        typeof inputField === 'object' && inputField.key === 'filterOutTALId',
+    );
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: {
+            status: 'success',
+            data: [{ id: 'tal-1', name: 'High Intent Customers' }],
+            metaData: { hasMore: false },
+          },
+          data: {
+            status: 'success',
+            data: [{ id: 'tal-1', name: 'High Intent Customers' }],
+            metaData: { hasMore: false },
+          },
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    const choices = await field.choices.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+      },
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+      meta: {},
+    });
+
+    expect(field.dependsOn).toEqual(['projectId']);
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      params: {
+        page: '1',
+        size: '100',
+      },
+    });
+    expect(requests[0].url).toContain(
+      '/nudge/projects/project-id/target-audience-lists/',
+    );
+    expect(choices).toEqual({
+      results: [
+        {
+          value: 'tal-1',
+          sample: 'tal-1',
+          label: 'High Intent Customers',
+        },
+      ],
+      paging_token: null,
+    });
+  });
+
   it('keeps customerIds as a manual multi-value field', () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['associateCustomerToTargetAudienceList'],

@@ -13,7 +13,6 @@ const HTTP_METHODS = ['get', 'post', 'put', 'patch', 'delete', 'options', 'head'
 const EXCLUDED_BODY_FIELDS = new Set([
   'organizationId',
   'projectId',
-  'customAttribute',
   'createdById',
   'createdDate',
   'modifiedById',

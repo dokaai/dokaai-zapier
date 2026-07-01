@@ -24,7 +24,7 @@ export const applyTargetAudienceListChoices = (
   document: OpenApiDocument,
   field: GeneratedInputField,
 ): GeneratedInputField => {
-  if (field.key !== 'targetAudienceListId') {
+  if (field.key !== 'targetAudienceListId' && field.key !== 'filterOutTALId') {
     return field;
   }
 
