@@ -428,6 +428,49 @@ const searchFixtures = [
         "name": "get_notification_handler name"
       }
     ]
+  },
+  {
+    "operationId": "getAllNotificationHandlersInProject",
+    "key": "get_all_notification_handlers_in_project",
+    "label": "List Notification Handlers",
+    "method": "GET",
+    "inputFields": [
+      "projectId",
+      "search",
+      "page",
+      "size"
+    ],
+    "inputData": {
+      "projectId": "projectId value",
+      "search": "search-value",
+      "page": "page-value",
+      "size": "size-value"
+    },
+    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/",
+    "expectedParams": {
+      "search": "search-value",
+      "page": "page-value",
+      "size": "size-value"
+    },
+    "expectedAuthHeaders": {
+      "x-client-key": "x-client-key-value",
+      "x-client-secret": "x-client-secret-value"
+    },
+    "responseJson": {
+      "status": "success",
+      "data": [
+        {
+          "id": "get_all_notification_handlers_in_project-id",
+          "name": "get_all_notification_handlers_in_project name"
+        }
+      ]
+    },
+    "expectedResult": [
+      {
+        "id": "get_all_notification_handlers_in_project-id",
+        "name": "get_all_notification_handlers_in_project name"
+      }
+    ]
   }
 ];
 
