@@ -540,6 +540,28 @@ describe('OpenAPI schema adapter', () => {
     });
   });
 
+  it('adds reviewer-friendly auth labels and help text', () => {
+    const authentication = buildAuthentication(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+
+    expect(authentication.connectionLabel).toBe(
+      'Dokaai {{bundle.authData.x-client-key}}',
+    );
+    expect(authentication.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: 'x-client-key',
+          helpText: expect.stringContaining('https://docs.dokaai.com'),
+        }),
+        expect.objectContaining({
+          key: 'x-client-secret',
+          helpText: expect.stringContaining('https://docs.dokaai.com'),
+        }),
+      ]),
+    );
+  });
+
   it('loads pool customer attributes as dynamic fields and submits them as plain body fields', async () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['addCustomersToPool', 'updateCustomerInPool'],

@@ -17,6 +17,17 @@ const labelFromSchemeName = (name: string): string =>
     .replace(/[-_]+/g, ' ')
     .replace(/\b\w/g, (character) => character.toUpperCase());
 
+const docsUrl = 'https://docs.dokaai.com';
+
+const helpTextForApiKey = (key: string, description: string | undefined): string =>
+  `${description ?? `Enter your Dokaai ${key}.`} See ${docsUrl} for credential setup.`;
+
+const helpTextForBearerToken = (
+  bearerFormat: string | undefined,
+  description: string | undefined,
+): string =>
+  `${description ?? `Enter your Dokaai ${bearerFormat ?? 'bearer'} token.`} See ${docsUrl} for credential setup.`;
+
 export const buildAuthenticationFields = (
   document: OpenApiDocument,
   operationIds?: readonly string[],
@@ -36,7 +47,7 @@ export const buildAuthenticationFields = (
           {
             key,
             label: labelFromSchemeName(key),
-            helpText: scheme.description ?? `Enter your Dokaai ${key}.`,
+            helpText: helpTextForApiKey(key, scheme.description),
             type: 'password' as const,
             required: true,
             computed: false as const,
@@ -49,9 +60,10 @@ export const buildAuthenticationFields = (
           {
             key: schemeKey,
             label: labelFromSchemeName(schemeKey),
-            helpText:
-              scheme.description ??
-              `Enter your Dokaai ${scheme.bearerFormat ?? 'bearer'} token.`,
+            helpText: helpTextForBearerToken(
+              scheme.bearerFormat,
+              scheme.description,
+            ),
             type: 'password' as const,
             required: true,
             computed: false as const,

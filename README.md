@@ -76,6 +76,12 @@ request body for the selected customer operations.
 `customerId` and `customerIds` are manual fields. They intentionally do not use
 a dropdown.
 
+Zapier validation may emit D004 warnings for ID-looking fields. The generated
+app uses `choices.perform` dynamic loaders so the dropdowns work at runtime,
+but Zapier's marketplace warning prefers the older `dynamic:
+"trigger.id.label"` trigger-reference style. Those warnings are accepted unless
+Zapier review explicitly requires hidden trigger-backed dropdowns.
+
 ## Adding An Operation
 
 1. Add or update the endpoint in `src/api/index.json`.
@@ -104,5 +110,7 @@ Searches:
 - `get_pool_customers`, generated from `operationId: getPoolCustomers`
 - `get_pool_customer_by_id`, generated from `operationId: getPoolCustomerById`
 - `get_notification_handler`, generated from `operationId: getNotificationHandler`
+- `get_all_notification_handlers_in_project`, generated from `operationId: getAllNotificationHandlersInProject`
+- `get_notification_handler_by_key`, generated from `operationId: getNotificationHandlerByKey`
 
 No triggers are registered at the moment.

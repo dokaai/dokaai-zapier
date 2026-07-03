@@ -15,6 +15,9 @@ const openApiSpec = require('./api/index.json') as OpenApiDocument;
 const app = defineApp({
   version: require('../package.json').version as string,
   platformVersion: zapier.version,
+  flags: {
+    cleanInputData: false,
+  },
   authentication: buildAuthentication(openApiSpec, {
     operationIds: zapierActionOperationIds,
   }),

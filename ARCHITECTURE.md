@@ -61,6 +61,12 @@ and small runtime helpers.
 OpenAPI plus runtime data. The current plugin loads customer pool custom
 attribute fields for customer create/update actions.
 
+The app uses Zapier `choices.perform` loaders for dynamic dropdowns instead of
+hidden trigger-backed `dynamic` references. This keeps dropdown behavior local
+to generated input fields and avoids maintaining Zapier-only trigger resources.
+Zapier's D004 marketplace warning can still appear for ID-looking fields even
+when the runtime dropdown works.
+
 ## Adding Capabilities
 
 Prefer extending generic inference in the OpenAPI adapter instead of adding
