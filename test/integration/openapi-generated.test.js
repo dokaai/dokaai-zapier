@@ -41,7 +41,7 @@ const operationFixtures = [
       "countryIsoCode": "countryIsoCode-value",
       "timeZone": "timeZone-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -95,7 +95,7 @@ const operationFixtures = [
         }
       ]
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/custom-attributes",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/custom-attributes",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -133,7 +133,7 @@ const operationFixtures = [
         "customerIds-2"
       ]
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/target-audience-lists/targetAudienceListId%20value/customers",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/target-audience-lists/targetAudienceListId%20value/customers",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -167,7 +167,7 @@ const operationFixtures = [
       "customerId": "customerId value",
       "projectId": "projectId value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/target-audience-lists/targetAudienceListId%20value/customer/customerId%20value",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/target-audience-lists/targetAudienceListId%20value/customer/customerId%20value",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -217,7 +217,7 @@ const operationFixtures = [
       "pinCode": "pinCode-value",
       "timeZone": "timeZone-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers/customerId%20value",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers/customerId%20value",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -261,7 +261,7 @@ const operationFixtures = [
       "projectId": "projectId value",
       "customerId": "customerId value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customer/customerId%20value/status",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customer/customerId%20value/status",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -291,7 +291,7 @@ const operationFixtures = [
       "mode": "mode-value",
       "idempotencyKey": "idempotencyKey-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/notificationHandlerId%20value/trigger",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/notificationHandlerId%20value/trigger",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -330,7 +330,7 @@ const searchFixtures = [
       "page": "page-value",
       "size": "size-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers",
     "expectedParams": {
       "search": "search-value",
       "searchField": "searchField-value",
@@ -375,7 +375,7 @@ const searchFixtures = [
       "customerPoolId": "customerPoolId value",
       "attributeTypes": "attributeTypes-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers/customerId%20value",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/customer/projects/projectId%20value/customer-pools/customerPoolId%20value/customers/customerId%20value",
     "expectedParams": {
       "attributeTypes": "attributeTypes-value"
     },
@@ -410,7 +410,7 @@ const searchFixtures = [
       "projectId": "projectId value",
       "notificationHandlerId": "notificationHandlerId value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/notificationHandlerId%20value",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/notificationHandlerId%20value",
     "expectedAuthHeaders": {
       "x-client-key": "x-client-key-value",
       "x-client-secret": "x-client-secret-value"
@@ -446,7 +446,7 @@ const searchFixtures = [
       "page": "page-value",
       "size": "size-value"
     },
-    "expectedUrl": "https://api-200422742317.asia-south1.run.app/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/",
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/",
     "expectedParams": {
       "search": "search-value",
       "page": "page-value",
@@ -469,6 +469,38 @@ const searchFixtures = [
       {
         "id": "get_all_notification_handlers_in_project-id",
         "name": "get_all_notification_handlers_in_project name"
+      }
+    ]
+  },
+  {
+    "operationId": "getNotificationHandlerByKey",
+    "key": "get_notification_handler_by_key",
+    "label": "Get Notification Handler By Key",
+    "method": "GET",
+    "inputFields": [
+      "projectId",
+      "handlerKey"
+    ],
+    "inputData": {
+      "projectId": "projectId value",
+      "handlerKey": "handlerKey value"
+    },
+    "expectedUrl": "http://api.dokaai.com/api/v1/dokaai/nudge/projects/projectId%20value/notification-handlers/key/handlerKey%20value",
+    "expectedAuthHeaders": {
+      "x-client-key": "x-client-key-value",
+      "x-client-secret": "x-client-secret-value"
+    },
+    "responseJson": {
+      "status": "success",
+      "data": {
+        "id": "get_notification_handler_by_key-id",
+        "name": "get_notification_handler_by_key name"
+      }
+    },
+    "expectedResult": [
+      {
+        "id": "get_notification_handler_by_key-id",
+        "name": "get_notification_handler_by_key name"
       }
     ]
   }

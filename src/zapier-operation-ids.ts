@@ -14,5 +14,6 @@ export const zapierSearchOperationIds = [
   'getPoolCustomers',
   'getPoolCustomerById',
   'getNotificationHandler',
-  'getAllNotificationHandlersInProject'
+  'getAllNotificationHandlersInProject',
+  'getNotificationHandlerByKey'
 ] as const;
