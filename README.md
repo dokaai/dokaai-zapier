@@ -34,6 +34,95 @@ for Zapier CLI validation and push.
 
 `npm test` runs `generate:tests` first, then Jest against the TypeScript source.
 
+## Deploying To Zapier
+
+This repo is a Zapier Platform CLI app. Zapier reads the app version from
+`package.json`.
+
+For a brand-new Zapier app, start at `0.0.0`, register/link the app once, then
+commit the generated `.zapierapprc` file:
+
+```bash
+zapier-platform login
+zapier-platform register "Dokaai"
+npm run check
+npm run push-zapier
+```
+
+If the app was created in the Zapier Platform UI instead of the CLI, link this
+repo to it before pushing:
+
+```bash
+zapier-platform login
+zapier-platform link
+npm run check
+npm run push-zapier
+```
+
+Zapier app versions are immutable, so deploy changes by bumping the
+`package.json` version before pushing. For example:
+
+```bash
+npm version patch --no-git-tag-version
+npm run check
+npm run push-zapier
+```
+
+After the first `0.0.0` push succeeds, bump to `0.1.0` when you want the first
+team-facing beta version:
+
+```bash
+npm version 0.1.0 --no-git-tag-version
+npm run check
+npm run push-zapier
+```
+
+Use `patch` for small fixes, `minor` for new non-breaking actions/searches, and
+`major` only for breaking changes such as renamed/removed fields or operation
+keys.
+
+`npm run push-zapier` builds the TypeScript output, prunes dev dependencies,
+and runs `zapier-platform push`. The pushed Zapier version is the version in
+`package.json`.
+
+### GitHub Actions Deploy
+
+The `Push Zapier App` workflow runs on pushes to `main` or `master`, and can
+also be started manually from the GitHub Actions tab.
+
+Before the workflow can push to Zapier, add this repository secret in GitHub:
+
+```text
+ZAPIER_DEPLOY_KEY
+```
+
+To get the deploy key, log in locally with the Zapier CLI:
+
+```bash
+npm install -g zapier-platform-cli@19.0.0
+zapier-platform login
+```
+
+The Zapier CLI stores the deploy key in `~/.zapierrc`. Copy the deploy key value
+into the GitHub repository secret. Do not commit `~/.zapierrc` or any deploy
+key to the repo.
+
+Recommended release flow:
+
+1. Update `src/api/index.json` or the Zapier source files.
+2. If operation IDs changed, update `src/zapier-operation-ids.ts`.
+3. Run `npm run generate:tests`.
+4. Bump the version in `package.json`.
+5. Run `npm run check`.
+6. Commit the source, generated tests, and version bump.
+7. Push or merge to `main`.
+8. Confirm the GitHub Actions `Push Zapier App` workflow passed.
+
+After a successful push, refresh the Zapier editor to see the new app version.
+If the version should become the public/production version for existing users,
+promote or migrate it intentionally from the Zapier CLI or Platform UI after
+testing.
+
 ## How Operations Are Created
 
 `src/index.ts` loads `src/api/index.json` and passes it to:

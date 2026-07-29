@@ -37,6 +37,36 @@ export const humanize = (value: string): string =>
     .trim()
     .replace(/\b\w/g, (character) => character.toUpperCase());
 
+const LOWERCASE_LABEL_WORDS = new Set([
+  'a',
+  'an',
+  'and',
+  'as',
+  'at',
+  'but',
+  'by',
+  'for',
+  'in',
+  'of',
+  'on',
+  'or',
+  'the',
+  'to',
+  'with',
+]);
+
+export const zapierLabel = (value: string): string => {
+  const words = humanize(value).split(' ');
+
+  return words
+    .map((word, index) =>
+      index > 0 && index < words.length - 1 && LOWERCASE_LABEL_WORDS.has(word.toLowerCase())
+        ? word.toLowerCase()
+        : word,
+    )
+    .join(' ');
+};
+
 export const getOpenApiBaseUrl = (document: OpenApiDocument): string => {
   const serverUrl = document.servers?.[0]?.url;
 

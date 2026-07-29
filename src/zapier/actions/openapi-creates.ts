@@ -9,13 +9,13 @@ import {
 import {
   authHeaders,
   HTTP_METHODS,
-  humanize,
   pathFromTemplate,
   readByPath,
   shouldIncludeValue,
   toSnakeCase,
   toZapierMethod,
   getOpenApiBaseUrl,
+  zapierLabel,
 } from '../../openapi/runtime';
 import { pluginsForOperation } from '../plugins';
 import type { ZapierOperationPluginContext } from '../plugins';
@@ -508,7 +508,7 @@ export const buildZapierCreatesFromOpenApi = (
     discoverZapierCreates(document, options.operationIds).map((discovered) => {
       const { operation } = discovered;
       const key = discovered.key;
-      const label = operation.summary ?? humanize(operation.operationId ?? key);
+      const label = zapierLabel(operation.summary ?? operation.operationId ?? key);
       const create = defineCreate({
         key,
         noun: label,

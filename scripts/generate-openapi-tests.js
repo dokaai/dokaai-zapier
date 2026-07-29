@@ -42,6 +42,44 @@ const toSnakeCase = (value) =>
     .replace(/_+/g, '_')
     .toLowerCase();
 
+const LOWERCASE_LABEL_WORDS = new Set([
+  'a',
+  'an',
+  'and',
+  'as',
+  'at',
+  'but',
+  'by',
+  'for',
+  'in',
+  'of',
+  'on',
+  'or',
+  'the',
+  'to',
+  'with',
+]);
+
+const humanize = (value) =>
+  value
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+
+const zapierLabel = (value) => {
+  const words = humanize(value).split(' ');
+
+  return words
+    .map((word, index) =>
+      index > 0 && index < words.length - 1 && LOWERCASE_LABEL_WORDS.has(word.toLowerCase())
+        ? word.toLowerCase()
+        : word,
+    )
+    .join(' ');
+};
+
 const normalizeSchema = (schema) => {
   if (!schema) {
     return {};
@@ -374,7 +412,7 @@ const buildOperationFixture = (operationId) => {
   return {
     operationId,
     key,
-    label: operation.summary || operationId,
+    label: zapierLabel(operation.summary || operationId),
     method: method.toUpperCase(),
     inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),
@@ -434,7 +472,7 @@ const buildSearchFixture = (operationId) => {
   return {
     operationId,
     key,
-    label: operation.summary || operationId,
+    label: zapierLabel(operation.summary || operationId),
     method: method.toUpperCase(),
     inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),

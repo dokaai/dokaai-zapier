@@ -10,11 +10,11 @@ import {
   authHeaders,
   getOpenApiBaseUrl,
   HTTP_METHODS,
-  humanize,
   pathFromTemplate,
   readByPath,
   toSnakeCase,
   toZapierMethod,
+  zapierLabel,
 } from '../../openapi/runtime';
 import { getJsonRequestSchema, normalizeSchema } from '../../openapi/schema';
 import {
@@ -341,7 +341,7 @@ export const buildZapierSearchesFromOpenApi = (
     discoverZapierSearches(document, options.operationIds).map((discovered) => {
       const { operation } = discovered;
       const key = discovered.key;
-      const label = operation.summary ?? humanize(operation.operationId ?? key);
+      const label = zapierLabel(operation.summary ?? operation.operationId ?? key);
       const search = defineSearch({
         key,
         noun: label,
