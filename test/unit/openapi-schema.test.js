@@ -552,11 +552,11 @@ describe('OpenAPI schema adapter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           key: 'x-client-key',
-          helpText: expect.stringContaining('https://docs.dokaai.com'),
+          helpText: expect.stringContaining('[Dokaai docs](https://docs.dokaai.com)'),
         }),
         expect.objectContaining({
           key: 'x-client-secret',
-          helpText: expect.stringContaining('https://docs.dokaai.com'),
+          helpText: expect.stringContaining('[Dokaai docs](https://docs.dokaai.com)'),
         }),
       ]),
     );

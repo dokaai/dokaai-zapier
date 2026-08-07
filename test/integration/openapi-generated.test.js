@@ -8,6 +8,7 @@ const operationFixtures = [
     "operationId": "addCustomersToPool",
     "key": "add_customers_to_pool",
     "label": "Add Customers to Pool",
+    "description": "Adds customers to a customer pool.",
     "method": "POST",
     "inputFields": [
       "projectId",
@@ -77,6 +78,7 @@ const operationFixtures = [
     "operationId": "addCustomerCustomAttribute",
     "key": "add_customer_custom_attribute",
     "label": "Create Customer Custom Attribute",
+    "description": "Creates a customer custom attribute.",
     "method": "POST",
     "inputFields": [
       "projectId",
@@ -118,7 +120,8 @@ const operationFixtures = [
   {
     "operationId": "associateCustomerToTargetAudienceList",
     "key": "associate_customer_to_target_audience_list",
-    "label": "Associate Customers to Target Audience List",
+    "label": "Add Customers to Target Audience List",
+    "description": "Adds customers to a target audience list.",
     "method": "POST",
     "inputFields": [
       "projectId",
@@ -155,7 +158,8 @@ const operationFixtures = [
   {
     "operationId": "deleteCustomerFromTargetAudienceList",
     "key": "delete_customer_from_target_audience_list",
-    "label": "Delete Customer From Target Audience List",
+    "label": "Remove Customer From Target Audience List",
+    "description": "Removes a customer from a target audience list.",
     "method": "PATCH",
     "inputFields": [
       "projectId",
@@ -184,6 +188,7 @@ const operationFixtures = [
     "operationId": "updateCustomerInPool",
     "key": "update_customer_in_pool",
     "label": "Update Customer in Pool",
+    "description": "Updates a customer in a pool.",
     "method": "PUT",
     "inputFields": [
       "projectId",
@@ -250,6 +255,7 @@ const operationFixtures = [
     "operationId": "removeCustomerFromPool",
     "key": "remove_customer_from_pool",
     "label": "Remove Customer From Pool",
+    "description": "Removes a customer from a pool.",
     "method": "PATCH",
     "inputFields": [
       "projectId",
@@ -277,7 +283,8 @@ const operationFixtures = [
   {
     "operationId": "triggerNotificationHandler",
     "key": "trigger_notification_handler",
-    "label": "Trigger Notification Handler",
+    "label": "Send Notification",
+    "description": "Sends a notification using a notification handler.",
     "method": "POST",
     "inputFields": [
       "projectId",
@@ -310,7 +317,8 @@ const searchFixtures = [
   {
     "operationId": "getPoolCustomers",
     "key": "get_pool_customers",
-    "label": "List Pool Customers",
+    "label": "Find Pool Customers",
+    "description": "Finds customers in a pool.",
     "method": "GET",
     "inputFields": [
       "projectId",
@@ -361,7 +369,8 @@ const searchFixtures = [
   {
     "operationId": "getPoolCustomerById",
     "key": "get_pool_customer_by_id",
-    "label": "Get Pool Customer by Id",
+    "label": "Find Pool Customer by ID",
+    "description": "Finds a customer in a pool by ID.",
     "method": "GET",
     "inputFields": [
       "projectId",
@@ -400,7 +409,8 @@ const searchFixtures = [
   {
     "operationId": "getNotificationHandler",
     "key": "get_notification_handler",
-    "label": "Get Notification Handler",
+    "label": "Find Notification Handler",
+    "description": "Finds a notification handler by ID.",
     "method": "GET",
     "inputFields": [
       "projectId",
@@ -432,7 +442,8 @@ const searchFixtures = [
   {
     "operationId": "getAllNotificationHandlersInProject",
     "key": "get_all_notification_handlers_in_project",
-    "label": "List Notification Handlers",
+    "label": "Find Notification Handlers",
+    "description": "Finds notification handlers in the current project.",
     "method": "GET",
     "inputFields": [
       "projectId",
@@ -475,7 +486,8 @@ const searchFixtures = [
   {
     "operationId": "getNotificationHandlerByKey",
     "key": "get_notification_handler_by_key",
-    "label": "Get Notification Handler by Key",
+    "label": "Find Notification Handler by Key",
+    "description": "Finds a notification handler by its handler key.",
     "method": "GET",
     "inputFields": [
       "projectId",
@@ -538,6 +550,7 @@ describe('OpenAPI generated Zapier app', () => {
 
     for (const fixture of operationFixtures) {
       expect(App.creates[fixture.key].display.label).toBe(fixture.label);
+      expect(App.creates[fixture.key].display.description).toBe(fixture.description);
       expect(App.creates[fixture.key].noun).toBe(fixture.label);
     }
   });
@@ -549,6 +562,7 @@ describe('OpenAPI generated Zapier app', () => {
 
     for (const fixture of searchFixtures) {
       expect(App.searches[fixture.key].display.label).toBe(fixture.label);
+      expect(App.searches[fixture.key].display.description).toBe(fixture.description);
       expect(App.searches[fixture.key].noun).toBe(fixture.label);
     }
   });

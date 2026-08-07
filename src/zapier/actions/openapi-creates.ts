@@ -15,8 +15,8 @@ import {
   toSnakeCase,
   toZapierMethod,
   getOpenApiBaseUrl,
-  zapierLabel,
 } from '../../openapi/runtime';
+import { zapierDisplayForOperation } from '../display-overrides';
 import { pluginsForOperation } from '../plugins';
 import type { ZapierOperationPluginContext } from '../plugins';
 import {
@@ -508,13 +508,13 @@ export const buildZapierCreatesFromOpenApi = (
     discoverZapierCreates(document, options.operationIds).map((discovered) => {
       const { operation } = discovered;
       const key = discovered.key;
-      const label = zapierLabel(operation.summary ?? operation.operationId ?? key);
+      const display = zapierDisplayForOperation(operation, key);
       const create = defineCreate({
         key,
-        noun: label,
+        noun: display.label,
         display: {
-          label,
-          description: operation.description ?? operation.summary ?? label,
+          label: display.label,
+          description: display.description,
           hidden: false,
         },
         operation: {

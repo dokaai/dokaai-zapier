@@ -80,6 +80,72 @@ const zapierLabel = (value) => {
     .join(' ');
 };
 
+const ZAPIER_DISPLAY_OVERRIDES = {
+  addCustomersToPool: {
+    label: 'Add Customers to Pool',
+    description: 'Adds customers to a customer pool.',
+  },
+  addCustomerCustomAttribute: {
+    label: 'Create Customer Custom Attribute',
+    description: 'Creates a customer custom attribute.',
+  },
+  associateCustomerToTargetAudienceList: {
+    label: 'Add Customers to Target Audience List',
+    description: 'Adds customers to a target audience list.',
+  },
+  deleteCustomerFromTargetAudienceList: {
+    label: 'Remove Customer From Target Audience List',
+    description: 'Removes a customer from a target audience list.',
+  },
+  updateCustomerInPool: {
+    label: 'Update Customer in Pool',
+    description: 'Updates a customer in a pool.',
+  },
+  removeCustomerFromPool: {
+    label: 'Remove Customer From Pool',
+    description: 'Removes a customer from a pool.',
+  },
+  triggerNotificationHandler: {
+    label: 'Send Notification',
+    description: 'Sends a notification using a notification handler.',
+  },
+  getPoolCustomers: {
+    label: 'Find Pool Customers',
+    description: 'Finds customers in a pool.',
+  },
+  getPoolCustomerById: {
+    label: 'Find Pool Customer by ID',
+    description: 'Finds a customer in a pool by ID.',
+  },
+  getNotificationHandler: {
+    label: 'Find Notification Handler',
+    description: 'Finds a notification handler by ID.',
+  },
+  getAllNotificationHandlersInProject: {
+    label: 'Find Notification Handlers',
+    description: 'Finds notification handlers in the current project.',
+  },
+  getNotificationHandlerByKey: {
+    label: 'Find Notification Handler by Key',
+    description: 'Finds a notification handler by its handler key.',
+  },
+};
+
+const zapierDisplayForOperation = (operation, fallbackKey) => {
+  const override = ZAPIER_DISPLAY_OVERRIDES[operation.operationId];
+
+  if (override) {
+    return override;
+  }
+
+  const label = zapierLabel(operation.summary || operation.operationId || fallbackKey);
+
+  return {
+    label,
+    description: operation.description || operation.summary || label,
+  };
+};
+
 const normalizeSchema = (schema) => {
   if (!schema) {
     return {};
@@ -404,6 +470,7 @@ const buildOperationFixture = (operationId) => {
   const idPath = findIdPath(successResponseSchema(operation));
   const responseJson = { status: 'success', data: {} };
   const responseId = `${key}-id`;
+  const display = zapierDisplayForOperation(operation, key);
 
   if (idPath) {
     setPathValue(responseJson, idPath, responseId);
@@ -412,7 +479,8 @@ const buildOperationFixture = (operationId) => {
   return {
     operationId,
     key,
-    label: zapierLabel(operation.summary || operationId),
+    label: display.label,
+    description: display.description,
     method: method.toUpperCase(),
     inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),
@@ -468,11 +536,13 @@ const buildSearchFixture = (operationId) => {
     status: 'success',
     data: isListResponse ? [responseItem] : responseItem,
   };
+  const display = zapierDisplayForOperation(operation, key);
 
   return {
     operationId,
     key,
-    label: zapierLabel(operation.summary || operationId),
+    label: display.label,
+    description: display.description,
     method: method.toUpperCase(),
     inputFields: sortPriorityFieldsFirst([
       ...pathParams.map((parameter) => parameter.name),
@@ -541,6 +611,7 @@ describe('OpenAPI generated Zapier app', () => {
 
     for (const fixture of operationFixtures) {
       expect(App.creates[fixture.key].display.label).toBe(fixture.label);
+      expect(App.creates[fixture.key].display.description).toBe(fixture.description);
       expect(App.creates[fixture.key].noun).toBe(fixture.label);
     }
   });
@@ -552,6 +623,7 @@ describe('OpenAPI generated Zapier app', () => {
 
     for (const fixture of searchFixtures) {
       expect(App.searches[fixture.key].display.label).toBe(fixture.label);
+      expect(App.searches[fixture.key].display.description).toBe(fixture.description);
       expect(App.searches[fixture.key].noun).toBe(fixture.label);
     }
   });

@@ -14,8 +14,8 @@ import {
   readByPath,
   toSnakeCase,
   toZapierMethod,
-  zapierLabel,
 } from '../../openapi/runtime';
+import { zapierDisplayForOperation } from '../display-overrides';
 import { getJsonRequestSchema, normalizeSchema } from '../../openapi/schema';
 import {
   applyCustomerPoolChoices,
@@ -341,13 +341,13 @@ export const buildZapierSearchesFromOpenApi = (
     discoverZapierSearches(document, options.operationIds).map((discovered) => {
       const { operation } = discovered;
       const key = discovered.key;
-      const label = zapierLabel(operation.summary ?? operation.operationId ?? key);
+      const display = zapierDisplayForOperation(operation, key);
       const search = defineSearch({
         key,
-        noun: label,
+        noun: display.label,
         display: {
-          label,
-          description: operation.description ?? operation.summary ?? label,
+          label: display.label,
+          description: display.description,
           hidden: false,
         },
         operation: {

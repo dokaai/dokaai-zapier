@@ -17,16 +17,16 @@ const labelFromSchemeName = (name: string): string =>
     .replace(/[-_]+/g, ' ')
     .replace(/\b\w/g, (character) => character.toUpperCase());
 
-const docsUrl = 'https://docs.dokaai.com';
+const docsLink = '[Dokaai docs](https://docs.dokaai.com)';
 
 const helpTextForApiKey = (key: string, description: string | undefined): string =>
-  `${description ?? `Enter your Dokaai ${key}.`} See ${docsUrl} for credential setup.`;
+  `${description ?? `Enter your Dokaai ${key}.`} See ${docsLink} for credential setup.`;
 
 const helpTextForBearerToken = (
   bearerFormat: string | undefined,
   description: string | undefined,
 ): string =>
-  `${description ?? `Enter your Dokaai ${bearerFormat ?? 'bearer'} token.`} See ${docsUrl} for credential setup.`;
+  `${description ?? `Enter your Dokaai ${bearerFormat ?? 'bearer'} token.`} See ${docsLink} for credential setup.`;
 
 export const buildAuthenticationFields = (
   document: OpenApiDocument,
