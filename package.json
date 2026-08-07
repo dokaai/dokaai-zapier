@@ -1,6 +1,6 @@
 {
   "name": "dokaai",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Dokaai is the notification infrastructure for product and engineering teams.",
   "main": "index.js",
   "scripts": {
