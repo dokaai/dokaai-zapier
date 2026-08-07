@@ -546,7 +546,7 @@ describe('OpenAPI schema adapter', () => {
     });
 
     expect(authentication.connectionLabel).toBe(
-      'Dokaai {{bundle.authData.x-client-key}}',
+      '{{bundle.inputData.data.workspaceId}} - {{bundle.inputData.data.name}} - {{bundle.inputData.data.environment}}',
     );
     expect(authentication.fields).toEqual(
       expect.arrayContaining([

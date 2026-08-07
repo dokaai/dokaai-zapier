@@ -835,7 +835,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "orgId": {
                             "type": "string"
@@ -887,7 +894,14 @@
                                     "type": "string"
                                   },
                                   "description": {
-                                    "type": "string"
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
                                   }
                                 }
                               },
@@ -1542,7 +1556,6 @@
                             "required": [
                               "name",
                               "tradeName",
-                              "description",
                               "icon",
                               "isPublished"
                             ],
@@ -1554,7 +1567,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "icon": {
                                 "type": "string"
@@ -1733,7 +1753,6 @@
                       "required": [
                         "id",
                         "name",
-                        "description",
                         "workspaceId",
                         "createdById",
                         "createdDate",
@@ -1750,7 +1769,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "workspaceId": {
                           "type": "string"
@@ -2915,7 +2941,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "orgId": {
                           "type": "string"
@@ -3049,7 +3082,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 }
               }
@@ -3135,7 +3175,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "orgId": {
                             "type": "string"
@@ -3341,7 +3388,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "orgId": {
                           "type": "string"
@@ -3640,7 +3694,6 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "description",
                   "isRealTime",
                   "notificationTypeId",
                   "priority"
@@ -3650,7 +3703,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "isRealTime": {
                     "type": "boolean"
@@ -5215,7 +5275,6 @@
                           "handlerKey",
                           "handlerId",
                           "name",
-                          "description",
                           "isRealTime",
                           "handlerStatus",
                           "recipientType",
@@ -5242,7 +5301,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "isRealTime": {
                             "type": "boolean"
@@ -5326,8 +5392,7 @@
                             "type": "object",
                             "required": [
                               "id",
-                              "name",
-                              "description"
+                              "name"
                             ],
                             "properties": {
                               "id": {
@@ -5337,7 +5402,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               }
                             }
                           }
@@ -5565,7 +5637,6 @@
                           "type": "object",
                           "required": [
                             "name",
-                            "description",
                             "isRealTime",
                             "isComplete",
                             "handlerStatus",
@@ -5580,7 +5651,14 @@
                               "type": "string"
                             },
                             "description": {
-                              "type": "string"
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             },
                             "isRealTime": {
                               "type": "boolean"
@@ -5606,8 +5684,7 @@
                               "type": "object",
                               "required": [
                                 "id",
-                                "name",
-                                "description"
+                                "name"
                               ],
                               "properties": {
                                 "id": {
@@ -5617,7 +5694,14 @@
                                   "type": "string"
                                 },
                                 "description": {
-                                  "type": "string"
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
                                 }
                               }
                             },
@@ -6189,7 +6273,6 @@
                                       "required": [
                                         "id",
                                         "name",
-                                        "description",
                                         "channels"
                                       ],
                                       "properties": {
@@ -6200,7 +6283,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         },
                                         "channels": {
                                           "type": "array",
@@ -6230,7 +6320,6 @@
                                       "required": [
                                         "id",
                                         "name",
-                                        "description",
                                         "channels"
                                       ],
                                       "properties": {
@@ -6241,7 +6330,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         },
                                         "channels": {
                                           "type": "array",
@@ -6294,8 +6390,7 @@
                                       "type": "object",
                                       "required": [
                                         "id",
-                                        "name",
-                                        "description"
+                                        "name"
                                       ],
                                       "properties": {
                                         "id": {
@@ -6305,7 +6400,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         }
                                       }
                                     },
@@ -6530,7 +6632,6 @@
                           "type": "object",
                           "required": [
                             "name",
-                            "description",
                             "isRealTime",
                             "isComplete",
                             "handlerStatus",
@@ -6545,7 +6646,14 @@
                               "type": "string"
                             },
                             "description": {
-                              "type": "string"
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             },
                             "isRealTime": {
                               "type": "boolean"
@@ -6571,8 +6679,7 @@
                               "type": "object",
                               "required": [
                                 "id",
-                                "name",
-                                "description"
+                                "name"
                               ],
                               "properties": {
                                 "id": {
@@ -6582,7 +6689,14 @@
                                   "type": "string"
                                 },
                                 "description": {
-                                  "type": "string"
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
                                 }
                               }
                             },
@@ -7154,7 +7268,6 @@
                                       "required": [
                                         "id",
                                         "name",
-                                        "description",
                                         "channels"
                                       ],
                                       "properties": {
@@ -7165,7 +7278,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         },
                                         "channels": {
                                           "type": "array",
@@ -7195,7 +7315,6 @@
                                       "required": [
                                         "id",
                                         "name",
-                                        "description",
                                         "channels"
                                       ],
                                       "properties": {
@@ -7206,7 +7325,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         },
                                         "channels": {
                                           "type": "array",
@@ -7259,8 +7385,7 @@
                                       "type": "object",
                                       "required": [
                                         "id",
-                                        "name",
-                                        "description"
+                                        "name"
                                       ],
                                       "properties": {
                                         "id": {
@@ -7270,7 +7395,14 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "string"
+                                          "anyOf": [
+                                            {
+                                              "type": "string"
+                                            },
+                                            {
+                                              "type": "null"
+                                            }
+                                          ]
                                         }
                                       }
                                     },
@@ -7505,6 +7637,16 @@
                           },
                           "notificationHandlerId": {
                             "type": "string"
+                          },
+                          "productSpaceId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "idempotencyKey": {
                             "type": "string"
@@ -8122,8 +8264,7 @@
                             "type": "object",
                             "required": [
                               "id",
-                              "name",
-                              "description"
+                              "name"
                             ],
                             "properties": {
                               "id": {
@@ -8133,7 +8274,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               }
                             }
                           },
@@ -9362,7 +9510,14 @@
                               "type": "string"
                             },
                             "description": {
-                              "type": "string"
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             }
                           }
                         },
@@ -9411,7 +9566,14 @@
                                       "type": "string"
                                     },
                                     "description": {
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "type": "string"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
                                     }
                                   }
                                 },
@@ -9596,7 +9758,6 @@
                             "required": [
                               "name",
                               "tradeName",
-                              "description",
                               "icon",
                               "isPublished"
                             ],
@@ -9608,7 +9769,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "icon": {
                                 "type": "string"
@@ -10077,7 +10245,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10098,7 +10265,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -10206,7 +10380,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10227,7 +10400,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -10335,7 +10515,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10356,7 +10535,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -10464,7 +10650,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10485,7 +10670,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -10593,7 +10785,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10614,7 +10805,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -10722,7 +10920,6 @@
                             "required": [
                               "id",
                               "integrationName",
-                              "description",
                               "isBackup",
                               "isDefault",
                               "organizationId",
@@ -10743,7 +10940,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "isBackup": {
                                 "type": "boolean"
@@ -11003,7 +11207,6 @@
                       "required": [
                         "id",
                         "credential",
-                        "description",
                         "integrationName",
                         "isBackup",
                         "isDefault"
@@ -11102,7 +11305,14 @@
                           }
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "integrationName": {
                           "type": "string"
@@ -12676,7 +12886,6 @@
                               "id",
                               "fieldName",
                               "fieldDisplayName",
-                              "fieldDescription",
                               "fieldType",
                               "organizationId",
                               "customerPoolId",
@@ -12699,7 +12908,14 @@
                                 "type": "string"
                               },
                               "fieldDescription": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "fieldType": {
                                 "type": "string",
@@ -12873,7 +13089,6 @@
                       "required": [
                         "fieldName",
                         "fieldDisplayName",
-                        "fieldDescription",
                         "fieldType"
                       ],
                       "properties": {
@@ -12884,7 +13099,14 @@
                           "type": "string"
                         },
                         "fieldDescription": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "fieldType": {
                           "type": "string",
@@ -13091,8 +13313,7 @@
                 "type": "object",
                 "required": [
                   "fieldName",
-                  "fieldDisplayName",
-                  "fieldDescription"
+                  "fieldDisplayName"
                 ],
                 "properties": {
                   "fieldName": {
@@ -13102,7 +13323,14 @@
                     "type": "string"
                   },
                   "fieldDescription": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "additionalProperties": false
@@ -13510,7 +13738,6 @@
                         "required": [
                           "id",
                           "name",
-                          "description",
                           "poolLevel",
                           "globalAccess",
                           "organization",
@@ -13526,7 +13753,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "poolLevel": {
                             "type": "string",
@@ -13782,7 +14016,6 @@
                       "required": [
                         "id",
                         "name",
-                        "description",
                         "globalAccess",
                         "customerPoolProjectSetting"
                       ],
@@ -13794,7 +14027,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "globalAccess": {
                           "type": "boolean"
@@ -14433,7 +14673,6 @@
                 "type": "object",
                 "required": [
                   "assignedPoolId",
-                  "description",
                   "name"
                 ],
                 "properties": {
@@ -14441,7 +14680,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "name": {
                     "minLength": 5,
@@ -14539,7 +14785,6 @@
                         "required": [
                           "id",
                           "name",
-                          "description",
                           "projectId",
                           "customerCount",
                           "assignedPoolId",
@@ -14562,7 +14807,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "projectId": {
                             "type": "string"
@@ -14601,8 +14853,7 @@
                             "required": [
                               "id",
                               "name",
-                              "poolLevel",
-                              "description"
+                              "poolLevel"
                             ],
                             "properties": {
                               "id": {
@@ -14619,7 +14870,14 @@
                                 ]
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               }
                             }
                           }
@@ -14940,8 +15198,7 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name",
-                  "description"
+                  "name"
                 ],
                 "properties": {
                   "name": {
@@ -14951,7 +15208,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "additionalProperties": false
@@ -15853,7 +16117,6 @@
                       "required": [
                         "id",
                         "name",
-                        "description",
                         "projectId",
                         "customerCount",
                         "assignedPoolId",
@@ -15876,7 +16139,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "projectId": {
                           "type": "string"
@@ -15915,8 +16185,7 @@
                           "required": [
                             "id",
                             "name",
-                            "poolLevel",
-                            "description"
+                            "poolLevel"
                           ],
                           "properties": {
                             "id": {
@@ -15933,7 +16202,14 @@
                               ]
                             },
                             "description": {
-                              "type": "string"
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
                             }
                           }
                         }
@@ -16225,7 +16501,6 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "description",
                   "channels"
                 ],
                 "properties": {
@@ -16233,7 +16508,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "channels": {
                     "uniqueItems": true,
@@ -16331,7 +16613,6 @@
                         "required": [
                           "id",
                           "name",
-                          "description",
                           "channels",
                           "topicsCount"
                         ],
@@ -16343,7 +16624,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "channels": {
                             "type": "array",
@@ -16685,31 +16973,43 @@
                 },
                 "type": "object",
                 "required": [
-                  "name",
-                  "description",
-                  "channels"
+                  "name"
                 ],
                 "properties": {
                   "name": {
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "channels": {
-                    "uniqueItems": true,
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "enum": [
-                        "in_app",
-                        "email",
-                        "sms",
-                        "chat",
-                        "push",
-                        "whatsApp"
-                      ]
-                    }
+                    "anyOf": [
+                      {
+                        "uniqueItems": true,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "in_app",
+                            "email",
+                            "sms",
+                            "chat",
+                            "push",
+                            "whatsApp"
+                          ]
+                        }
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 }
               }
@@ -16901,7 +17201,6 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "description",
                   "channels"
                 ],
                 "properties": {
@@ -16909,7 +17208,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "channels": {
                     "uniqueItems": true,
@@ -17018,7 +17324,6 @@
                             "required": [
                               "id",
                               "name",
-                              "description",
                               "notificationGroupId",
                               "channels"
                             ],
@@ -17030,7 +17335,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "notificationGroupId": {
                                 "type": "string"
@@ -17064,7 +17376,6 @@
                                   "required": [
                                     "id",
                                     "name",
-                                    "description",
                                     "handlerKey",
                                     "handlerId"
                                   ],
@@ -17076,7 +17387,14 @@
                                       "type": "string"
                                     },
                                     "description": {
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "type": "string"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
                                     },
                                     "handlerKey": {
                                       "description": "Stable business identifier for the notification handler.",
@@ -17424,7 +17742,6 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "description",
                   "channels"
                 ],
                 "properties": {
@@ -17432,7 +17749,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "channels": {
                     "uniqueItems": true,
@@ -17517,7 +17841,6 @@
                         "organizationId",
                         "id",
                         "name",
-                        "description",
                         "notificationGroupId",
                         "channels"
                       ],
@@ -17532,7 +17855,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "notificationGroupId": {
                           "type": "string"
@@ -17751,7 +18081,6 @@
                             "required": [
                               "id",
                               "name",
-                              "description",
                               "notificationGroupId",
                               "channels"
                             ],
@@ -17763,7 +18092,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               },
                               "notificationGroupId": {
                                 "type": "string"
@@ -17797,7 +18133,6 @@
                                   "required": [
                                     "id",
                                     "name",
-                                    "description",
                                     "handlerKey",
                                     "handlerId"
                                   ],
@@ -17809,7 +18144,14 @@
                                       "type": "string"
                                     },
                                     "description": {
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "type": "string"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
                                     },
                                     "handlerKey": {
                                       "description": "Stable business identifier for the notification handler.",
@@ -18020,7 +18362,6 @@
                       "required": [
                         "id",
                         "name",
-                        "description",
                         "projectId",
                         "channels",
                         "notificationHandler"
@@ -18033,7 +18374,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "projectId": {
                           "type": "string"
@@ -18058,8 +18406,7 @@
                             "type": "object",
                             "required": [
                               "id",
-                              "name",
-                              "description"
+                              "name"
                             ],
                             "properties": {
                               "id": {
@@ -18069,7 +18416,14 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               }
                             }
                           }
@@ -18239,7 +18593,14 @@
                             "type": "string"
                           },
                           "groupDescription": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "isGroupNotificationOff": {
                             "type": "boolean"
@@ -18287,7 +18648,14 @@
                                   "type": "string"
                                 },
                                 "topicDescription": {
-                                  "type": "string"
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
                                 },
                                 "isTopicNotificationOff": {
                                   "type": "boolean"
@@ -19133,12 +19501,18 @@
                   {
                     "type": "object",
                     "required": [
-                      "description",
                       "name"
                     ],
                     "properties": {
                       "description": {
-                        "type": "string"
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       },
                       "name": {
                         "type": "string"
@@ -19245,7 +19619,6 @@
                         "required": [
                           "id",
                           "name",
-                          "description",
                           "customerPool"
                         ],
                         "properties": {
@@ -19260,15 +19633,21 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "customerPool": {
                             "type": "object",
                             "required": [
                               "id",
                               "name",
-                              "poolLevel",
-                              "description"
+                              "poolLevel"
                             ],
                             "properties": {
                               "id": {
@@ -19285,7 +19664,14 @@
                                 ]
                               },
                               "description": {
-                                "type": "string"
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
                               }
                             }
                           }
@@ -19611,7 +19997,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 }
               }
@@ -20388,7 +20781,6 @@
                       "required": [
                         "id",
                         "name",
-                        "description",
                         "poolId",
                         "organizationId",
                         "projectId",
@@ -20402,7 +20794,14 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "string"
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
                         },
                         "cohortQuery": {
                           "$id": "getCohortSegmentById_response_T0",
@@ -21089,7 +21488,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "parentNotificationTypeId": {
                     "type": "string"
@@ -21291,7 +21697,14 @@
                     "type": "string"
                   },
                   "description": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "channelsToBypassDND": {
                     "type": "array",
@@ -22132,7 +22545,14 @@
                             ]
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           }
                         }
                       }
@@ -22335,7 +22755,14 @@
                             "type": "string"
                           },
                           "description": {
-                            "type": "string"
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "parentNotificationTypeId": {
                             "type": "string"
@@ -24231,6 +24658,208 @@
             }
           }
         }
+      }
+    },
+    "/opm/client-secrets/me": {
+      "get": {
+        "tags": [
+          "Client Secrets"
+        ],
+        "operationId": "getCurrentClientSecret",
+        "summary": "Get Current Client Secret",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "metaData",
+                    "error"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "name",
+                            "environment",
+                            "organizationId",
+                            "expiredAt"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "environment": {
+                              "type": "string",
+                              "enum": [
+                                "Production",
+                                "Sandbox"
+                              ]
+                            },
+                            "organizationId": {
+                              "type": "string"
+                            },
+                            "expiredAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "isActive": {
+                              "type": "boolean"
+                            },
+                            "modifiedDate": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "organizationName",
+                            "workspaceId"
+                          ],
+                          "properties": {
+                            "organizationName": {
+                              "type": "string"
+                            },
+                            "workspaceId": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "metaData": {
+                      "type": "null"
+                    },
+                    "error": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get safe metadata for the current client API secret."
       }
     },
     "/nudge/projects/{projectId}/jobs/": {

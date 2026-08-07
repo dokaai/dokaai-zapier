@@ -562,13 +562,29 @@ describe('OpenAPI generated Zapier app', () => {
     );
   });
 
-  it('runs a generic auth test without requiring Zapier metadata in OpenAPI', async () => {
-    const { z, requests } = makeZ({ status: 'success', data: [] });
+  it('validates auth against client secret metadata endpoint', async () => {
+    const authResponse = {
+      status: 'success',
+      data: {
+        workspaceId: '0XYR9WTB',
+        name: 'test-zapier-key',
+        environment: 'Production',
+      },
+    };
+    const { z, requests } = makeZ(authResponse);
 
     const result = await App.authentication.test(z, bundle({}));
 
-    expect(requests).toEqual([]);
-    expect(result).toEqual({ status: 'success' });
+    expect(requests[0]).toMatchObject({
+      method: 'GET',
+      url: 'https://api.dokaai.com/v1/dokaai/opm/client-secrets/me',
+      headers: {
+        Accept: 'application/json',
+        'x-client-key': 'x-client-key-value',
+        'x-client-secret': 'x-client-secret-value',
+      },
+    });
+    expect(result).toEqual(authResponse);
   });
 
   it('generates input fields from path params and request body schema', () => {

@@ -12,6 +12,6 @@ export const buildAuthentication = (
     type: 'custom',
     test: buildTestAuthentication(document),
     fields: buildAuthenticationFields(document, options.operationIds),
-    connectionLabel: 'Dokaai {{bundle.authData.x-client-key}}',
+    connectionLabel: '{{bundle.inputData.data.workspaceId}} - {{bundle.inputData.data.name}} - {{bundle.inputData.data.environment}}',
     customConfig: {},
   }) as const;
