@@ -16,8 +16,7 @@ const operationFixtures = [
       "uniqueCustomerId",
       "emailId",
       "phoneNumber",
-      "iosDeviceTokens",
-      "androidDeviceTokens",
+      "pushContactPoints",
       "name",
       "pinCode",
       "countryIsoCode",
@@ -29,13 +28,12 @@ const operationFixtures = [
       "uniqueCustomerId": "uniqueCustomerId-value",
       "emailId": "emailId-value",
       "phoneNumber": "phoneNumber-value",
-      "iosDeviceTokens": [
-        "iosDeviceTokens-1",
-        "iosDeviceTokens-2"
-      ],
-      "androidDeviceTokens": [
-        "androidDeviceTokens-1",
-        "androidDeviceTokens-2"
+      "pushContactPoints": [
+        {
+          "provider": "provider-value",
+          "token": "token-value",
+          "platform": "platform-value"
+        }
       ],
       "name": "name-value",
       "pinCode": "pinCode-value",
@@ -52,13 +50,12 @@ const operationFixtures = [
         "uniqueCustomerId": "uniqueCustomerId-value",
         "emailId": "emailId-value",
         "phoneNumber": "phoneNumber-value",
-        "iosDeviceTokens": [
-          "iosDeviceTokens-1",
-          "iosDeviceTokens-2"
-        ],
-        "androidDeviceTokens": [
-          "androidDeviceTokens-1",
-          "androidDeviceTokens-2"
+        "pushContactPoints": [
+          {
+            "provider": "provider-value",
+            "token": "token-value",
+            "platform": "platform-value"
+          }
         ],
         "name": "name-value",
         "pinCode": "pinCode-value",
@@ -196,8 +193,7 @@ const operationFixtures = [
       "customerId",
       "name",
       "countryIsoCode",
-      "iosDeviceTokens",
-      "androidDeviceTokens",
+      "pushContactPoints",
       "emailId",
       "phoneNumber",
       "pinCode",
@@ -209,13 +205,12 @@ const operationFixtures = [
       "projectId": "projectId value",
       "name": "name-value",
       "countryIsoCode": "countryIsoCode-value",
-      "iosDeviceTokens": [
-        "iosDeviceTokens-1",
-        "iosDeviceTokens-2"
-      ],
-      "androidDeviceTokens": [
-        "androidDeviceTokens-1",
-        "androidDeviceTokens-2"
+      "pushContactPoints": [
+        {
+          "provider": "provider-value",
+          "token": "token-value",
+          "platform": "platform-value"
+        }
       ],
       "emailId": "emailId-value",
       "phoneNumber": "phoneNumber-value",
@@ -230,13 +225,12 @@ const operationFixtures = [
     "expectedBody": {
       "name": "name-value",
       "countryIsoCode": "countryIsoCode-value",
-      "iosDeviceTokens": [
-        "iosDeviceTokens-1",
-        "iosDeviceTokens-2"
-      ],
-      "androidDeviceTokens": [
-        "androidDeviceTokens-1",
-        "androidDeviceTokens-2"
+      "pushContactPoints": [
+        {
+          "provider": "provider-value",
+          "token": "token-value",
+          "platform": "platform-value"
+        }
       ],
       "emailId": "emailId-value",
       "phoneNumber": "phoneNumber-value",

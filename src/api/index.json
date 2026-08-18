@@ -2715,7 +2715,40 @@
             }
           }
         },
-        "description": "Create or rotate the active customer sign-in key for a product space."
+        "description": "Create or rotate the active customer sign-in key for a product space.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {}
+                  },
+                  {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": [
+                      "rotate",
+                      "expectedCurrentSigningKeyId"
+                    ],
+                    "properties": {
+                      "rotate": {
+                        "const": true,
+                        "type": "boolean"
+                      },
+                      "expectedCurrentSigningKeyId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
       }
     },
     "/nudge/customer-auth-keys/{customerSignInKeyId}/deactivate": {
@@ -4827,29 +4860,67 @@
                                     }
                                   ]
                                 },
-                                "iosDeviceTokens": {
+                                "pinCode": {
                                   "anyOf": [
                                     {
-                                      "type": "array",
-                                      "items": {
-                                        "minLength": 1,
-                                        "pattern": "^(?!\\s*$)[^,]+$",
-                                        "type": "string"
-                                      }
+                                      "type": "string"
                                     },
                                     {
                                       "type": "null"
                                     }
                                   ]
                                 },
-                                "androidDeviceTokens": {
+                                "countryIsoCode": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "timeZone": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "pushContactPoints": {
                                   "anyOf": [
                                     {
                                       "type": "array",
                                       "items": {
-                                        "minLength": 1,
-                                        "pattern": "^(?!\\s*$)[^,]+$",
-                                        "type": "string"
+                                        "type": "object",
+                                        "required": [
+                                          "provider",
+                                          "token"
+                                        ],
+                                        "properties": {
+                                          "provider": {
+                                            "type": "string",
+                                            "enum": [
+                                              "firebaseCloudMessaging",
+                                              "apns",
+                                              "expo"
+                                            ]
+                                          },
+                                          "token": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "platform": {
+                                            "type": "string",
+                                            "enum": [
+                                              "ios",
+                                              "android"
+                                            ]
+                                          }
+                                        }
                                       }
                                     },
                                     {
@@ -4897,31 +4968,38 @@
                                 {
                                   "type": "object",
                                   "required": [
-                                    "iosDeviceTokens"
+                                    "pushContactPoints"
                                   ],
                                   "properties": {
-                                    "iosDeviceTokens": {
+                                    "pushContactPoints": {
                                       "type": "array",
                                       "items": {
-                                        "minLength": 1,
-                                        "pattern": "^(?!\\s*$)[^,]+$",
-                                        "type": "string"
-                                      }
-                                    }
-                                  }
-                                },
-                                {
-                                  "type": "object",
-                                  "required": [
-                                    "androidDeviceTokens"
-                                  ],
-                                  "properties": {
-                                    "androidDeviceTokens": {
-                                      "type": "array",
-                                      "items": {
-                                        "minLength": 1,
-                                        "pattern": "^(?!\\s*$)[^,]+$",
-                                        "type": "string"
+                                        "type": "object",
+                                        "required": [
+                                          "provider",
+                                          "token"
+                                        ],
+                                        "properties": {
+                                          "provider": {
+                                            "type": "string",
+                                            "enum": [
+                                              "firebaseCloudMessaging",
+                                              "apns",
+                                              "expo"
+                                            ]
+                                          },
+                                          "token": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          },
+                                          "platform": {
+                                            "type": "string",
+                                            "enum": [
+                                              "ios",
+                                              "android"
+                                            ]
+                                          }
+                                        }
                                       }
                                     }
                                   }
@@ -7699,29 +7777,67 @@
                                                 }
                                               ]
                                             },
-                                            "iosDeviceTokens": {
+                                            "pinCode": {
                                               "anyOf": [
                                                 {
-                                                  "type": "array",
-                                                  "items": {
-                                                    "minLength": 1,
-                                                    "pattern": "^(?!\\s*$)[^,]+$",
-                                                    "type": "string"
-                                                  }
+                                                  "type": "string"
                                                 },
                                                 {
                                                   "type": "null"
                                                 }
                                               ]
                                             },
-                                            "androidDeviceTokens": {
+                                            "countryIsoCode": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "timeZone": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "string"
+                                                },
+                                                {
+                                                  "type": "null"
+                                                }
+                                              ]
+                                            },
+                                            "pushContactPoints": {
                                               "anyOf": [
                                                 {
                                                   "type": "array",
                                                   "items": {
-                                                    "minLength": 1,
-                                                    "pattern": "^(?!\\s*$)[^,]+$",
-                                                    "type": "string"
+                                                    "type": "object",
+                                                    "required": [
+                                                      "provider",
+                                                      "token"
+                                                    ],
+                                                    "properties": {
+                                                      "provider": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                          "firebaseCloudMessaging",
+                                                          "apns",
+                                                          "expo"
+                                                        ]
+                                                      },
+                                                      "token": {
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "platform": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                          "ios",
+                                                          "android"
+                                                        ]
+                                                      }
+                                                    }
                                                   }
                                                 },
                                                 {
@@ -7769,31 +7885,38 @@
                                             {
                                               "type": "object",
                                               "required": [
-                                                "iosDeviceTokens"
+                                                "pushContactPoints"
                                               ],
                                               "properties": {
-                                                "iosDeviceTokens": {
+                                                "pushContactPoints": {
                                                   "type": "array",
                                                   "items": {
-                                                    "minLength": 1,
-                                                    "pattern": "^(?!\\s*$)[^,]+$",
-                                                    "type": "string"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            {
-                                              "type": "object",
-                                              "required": [
-                                                "androidDeviceTokens"
-                                              ],
-                                              "properties": {
-                                                "androidDeviceTokens": {
-                                                  "type": "array",
-                                                  "items": {
-                                                    "minLength": 1,
-                                                    "pattern": "^(?!\\s*$)[^,]+$",
-                                                    "type": "string"
+                                                    "type": "object",
+                                                    "required": [
+                                                      "provider",
+                                                      "token"
+                                                    ],
+                                                    "properties": {
+                                                      "provider": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                          "firebaseCloudMessaging",
+                                                          "apns",
+                                                          "expo"
+                                                        ]
+                                                      },
+                                                      "token": {
+                                                        "minLength": 1,
+                                                        "type": "string"
+                                                      },
+                                                      "platform": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                          "ios",
+                                                          "android"
+                                                        ]
+                                                      }
+                                                    }
                                                   }
                                                 }
                                               }
@@ -8081,6 +8204,305 @@
                                   "SERVICE",
                                   "MARKETING"
                                 ]
+                              },
+                              "sendPoliciesByChannel": {
+                                "type": "object",
+                                "properties": {
+                                  "in_app": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "email": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "sms": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "chat": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "push": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "whatsApp": {
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "required": [
+                                      "allowCriticalDNDBypass",
+                                      "dndSubTypesByPassIds"
+                                    ],
+                                    "properties": {
+                                      "dnd": {
+                                        "type": "object",
+                                        "required": [
+                                          "enabled",
+                                          "startMin",
+                                          "endMin",
+                                          "timezone"
+                                        ],
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "startMin": {
+                                            "type": "number"
+                                          },
+                                          "endMin": {
+                                            "type": "number"
+                                          },
+                                          "timezone": {
+                                            "type": "string"
+                                          },
+                                          "action": {
+                                            "type": "string",
+                                            "enum": [
+                                              "delay",
+                                              "drop"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "allowCriticalDNDBypass": {
+                                        "type": "boolean"
+                                      },
+                                      "dndSubTypesByPassIds": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               },
                               "customerPreference": {
                                 "additionalProperties": false,
@@ -8509,6 +8931,1273 @@
         "description": "Get all notification handler events by notification handler id."
       }
     },
+    "/nudge/projects/{projectId}/notification-handlers/{notificationHandlerId}/events/{notificationHandlerEventId}": {
+      "get": {
+        "tags": [
+          "Notification Handlers"
+        ],
+        "operationId": "getNotificationHandlerEventById",
+        "summary": "Get Notification Handler Event",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "notificationHandlerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "notificationHandlerEventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data",
+                    "metaData",
+                    "error"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "organizationId",
+                        "notificationHandlerId",
+                        "idempotencyKey",
+                        "snapshotVersion",
+                        "notificationHandlerEventStatus",
+                        "mode",
+                        "notificationHandler",
+                        "notificationHandlerEventExecution"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "organizationId": {
+                          "type": "string"
+                        },
+                        "notificationHandlerId": {
+                          "type": "string"
+                        },
+                        "productSpaceId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "idempotencyKey": {
+                          "type": "string"
+                        },
+                        "overrideOptions": {
+                          "anyOf": [
+                            {
+                              "additionalProperties": false,
+                              "type": "object",
+                              "required": [
+                                "recipients"
+                              ],
+                              "properties": {
+                                "recipients": {
+                                  "minItems": 1,
+                                  "type": "array",
+                                  "items": {
+                                    "allOf": [
+                                      {
+                                        "additionalProperties": true,
+                                        "type": "object",
+                                        "properties": {
+                                          "uniqueCustomerId": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "emailId": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "phoneNumber": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "pinCode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "countryIsoCode": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "timeZone": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          },
+                                          "pushContactPoints": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "provider",
+                                                    "token"
+                                                  ],
+                                                  "properties": {
+                                                    "provider": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "firebaseCloudMessaging",
+                                                        "apns",
+                                                        "expo"
+                                                      ]
+                                                    },
+                                                    "token": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "platform": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "ios",
+                                                        "android"
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "uniqueCustomerId"
+                                            ],
+                                            "properties": {
+                                              "uniqueCustomerId": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "emailId"
+                                            ],
+                                            "properties": {
+                                              "emailId": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "phoneNumber"
+                                            ],
+                                            "properties": {
+                                              "phoneNumber": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          {
+                                            "type": "object",
+                                            "required": [
+                                              "pushContactPoints"
+                                            ],
+                                            "properties": {
+                                              "pushContactPoints": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "provider",
+                                                    "token"
+                                                  ],
+                                                  "properties": {
+                                                    "provider": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "firebaseCloudMessaging",
+                                                        "apns",
+                                                        "expo"
+                                                      ]
+                                                    },
+                                                    "token": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    },
+                                                    "platform": {
+                                                      "type": "string",
+                                                      "enum": [
+                                                        "ios",
+                                                        "android"
+                                                      ]
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                },
+                                "templateData": {
+                                  "additionalProperties": true,
+                                  "type": "object",
+                                  "properties": {}
+                                },
+                                "enabledOnlyChannels": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "in_app",
+                                      "email",
+                                      "sms",
+                                      "chat",
+                                      "push",
+                                      "whatsApp"
+                                    ]
+                                  }
+                                },
+                                "metadata": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "properties": {
+                                    "eventName": {
+                                      "type": "string"
+                                    },
+                                    "tags": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "utm": {
+                                      "type": "object",
+                                      "required": [
+                                        "source",
+                                        "medium",
+                                        "campaign",
+                                        "term"
+                                      ],
+                                      "properties": {
+                                        "source": {
+                                          "type": "string"
+                                        },
+                                        "medium": {
+                                          "type": "string"
+                                        },
+                                        "campaign": {
+                                          "type": "string"
+                                        },
+                                        "term": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "traceId": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "channelOverrides": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "properties": {
+                                    "email": {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "properties": {
+                                        "from": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "senderName": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "replyTo": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "bcc": {
+                                          "minItems": 1,
+                                          "type": "array",
+                                          "items": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "providerOptions": {
+                                          "additionalProperties": true,
+                                          "type": "object",
+                                          "properties": {}
+                                        }
+                                      }
+                                    },
+                                    "sms": {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "properties": {
+                                        "from": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "providerOptions": {
+                                          "additionalProperties": true,
+                                          "type": "object",
+                                          "properties": {}
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "additionalProperties": false,
+                              "type": "object",
+                              "required": [
+                                "recipientCriteria"
+                              ],
+                              "properties": {
+                                "recipientCriteria": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "properties": {
+                                    "targetListId": {
+                                      "type": "string"
+                                    },
+                                    "cohortId": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "templateData": {
+                                  "additionalProperties": true,
+                                  "type": "object",
+                                  "properties": {}
+                                },
+                                "enabledOnlyChannels": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "enum": [
+                                      "in_app",
+                                      "email",
+                                      "sms",
+                                      "chat",
+                                      "push",
+                                      "whatsApp"
+                                    ]
+                                  }
+                                },
+                                "metadata": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "properties": {
+                                    "eventName": {
+                                      "type": "string"
+                                    },
+                                    "tags": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "utm": {
+                                      "type": "object",
+                                      "required": [
+                                        "source",
+                                        "medium",
+                                        "campaign",
+                                        "term"
+                                      ],
+                                      "properties": {
+                                        "source": {
+                                          "type": "string"
+                                        },
+                                        "medium": {
+                                          "type": "string"
+                                        },
+                                        "campaign": {
+                                          "type": "string"
+                                        },
+                                        "term": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "traceId": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "channelOverrides": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "properties": {
+                                    "email": {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "properties": {
+                                        "from": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "senderName": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "replyTo": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "bcc": {
+                                          "minItems": 1,
+                                          "type": "array",
+                                          "items": {
+                                            "minLength": 1,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "providerOptions": {
+                                          "additionalProperties": true,
+                                          "type": "object",
+                                          "properties": {}
+                                        }
+                                      }
+                                    },
+                                    "sms": {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "properties": {
+                                        "from": {
+                                          "minLength": 1,
+                                          "type": "string"
+                                        },
+                                        "providerOptions": {
+                                          "additionalProperties": true,
+                                          "type": "object",
+                                          "properties": {}
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "handlerExecutionSnapshot": {
+                          "additionalProperties": false,
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "handlerId",
+                            "name",
+                            "notificationTypeKind",
+                            "customerPreference",
+                            "channels",
+                            "recipientCriteria"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "handlerId": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "notificationTypeKind": {
+                              "type": "string",
+                              "enum": [
+                                "TRANSACTIONAL",
+                                "SERVICE",
+                                "MARKETING"
+                              ]
+                            },
+                            "sendPoliciesByChannel": {
+                              "type": "object",
+                              "properties": {
+                                "in_app": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "email": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "sms": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "chat": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "push": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                },
+                                "whatsApp": {
+                                  "additionalProperties": false,
+                                  "type": "object",
+                                  "required": [
+                                    "allowCriticalDNDBypass",
+                                    "dndSubTypesByPassIds"
+                                  ],
+                                  "properties": {
+                                    "dnd": {
+                                      "type": "object",
+                                      "required": [
+                                        "enabled",
+                                        "startMin",
+                                        "endMin",
+                                        "timezone"
+                                      ],
+                                      "properties": {
+                                        "enabled": {
+                                          "type": "boolean"
+                                        },
+                                        "startMin": {
+                                          "type": "number"
+                                        },
+                                        "endMin": {
+                                          "type": "number"
+                                        },
+                                        "timezone": {
+                                          "type": "string"
+                                        },
+                                        "action": {
+                                          "type": "string",
+                                          "enum": [
+                                            "delay",
+                                            "drop"
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    "allowCriticalDNDBypass": {
+                                      "type": "boolean"
+                                    },
+                                    "dndSubTypesByPassIds": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "customerPreference": {
+                              "additionalProperties": false,
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "group",
+                                "topic"
+                              ],
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "topic",
+                                    "group",
+                                    "no_preference"
+                                  ]
+                                },
+                                "group": {
+                                  "anyOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "required": [
+                                        "id",
+                                        "channels"
+                                      ],
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "channels": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string",
+                                            "enum": [
+                                              "in_app",
+                                              "email",
+                                              "sms",
+                                              "chat",
+                                              "push",
+                                              "whatsApp"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "topic": {
+                                  "anyOf": [
+                                    {
+                                      "additionalProperties": false,
+                                      "type": "object",
+                                      "required": [
+                                        "id",
+                                        "channels"
+                                      ],
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "channels": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string",
+                                            "enum": [
+                                              "in_app",
+                                              "email",
+                                              "sms",
+                                              "chat",
+                                              "push",
+                                              "whatsApp"
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "channels": {
+                              "type": "array",
+                              "items": {
+                                "additionalProperties": false,
+                                "type": "object",
+                                "required": [
+                                  "id",
+                                  "channelType",
+                                  "isUserPreferenceRequired"
+                                ],
+                                "properties": {
+                                  "id": {
+                                    "type": "string"
+                                  },
+                                  "channelType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "in_app",
+                                      "email",
+                                      "sms",
+                                      "chat",
+                                      "push",
+                                      "whatsApp"
+                                    ]
+                                  },
+                                  "isUserPreferenceRequired": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              }
+                            },
+                            "recipientCriteria": {
+                              "additionalProperties": false,
+                              "type": "object",
+                              "required": [
+                                "sourceType",
+                                "isOverrideApplied"
+                              ],
+                              "properties": {
+                                "sourceType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "payload_based",
+                                    "target_audience_list",
+                                    "cohort_segment"
+                                  ]
+                                },
+                                "cohortSegmentId": {
+                                  "type": "string"
+                                },
+                                "targetAudienceListId": {
+                                  "type": "string"
+                                },
+                                "isOverrideApplied": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "snapshotVersion": {
+                          "type": "number"
+                        },
+                        "notificationHandlerEventStatus": {
+                          "type": "string",
+                          "enum": [
+                            "pending",
+                            "in_progress",
+                            "completed",
+                            "failed"
+                          ]
+                        },
+                        "mode": {
+                          "type": "string",
+                          "enum": [
+                            "live",
+                            "test"
+                          ]
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "modifiedDate": {
+                          "type": "string"
+                        },
+                        "isActive": {
+                          "type": "boolean"
+                        },
+                        "isDeleted": {
+                          "type": "boolean"
+                        },
+                        "notificationHandler": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "name"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "notificationHandlerEventExecution": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "required": [
+                                "id",
+                                "handlerEventId",
+                                "organizationId",
+                                "projectId",
+                                "status",
+                                "lastErrorClass",
+                                "lastErrorCode",
+                                "lastErrorMessage",
+                                "startedAt",
+                                "completedAt"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "handlerEventId": {
+                                  "type": "string"
+                                },
+                                "organizationId": {
+                                  "type": "string"
+                                },
+                                "projectId": {
+                                  "type": "string"
+                                },
+                                "status": {
+                                  "type": "string"
+                                },
+                                "executionSummary": {},
+                                "lastErrorClass": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "lastErrorCode": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "lastErrorMessage": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "startedAt": {
+                                  "type": "string"
+                                },
+                                "completedAt": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "metaData": {
+                      "type": "null"
+                    },
+                    "error": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {},
+                    "metaData": {},
+                    "error": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Get a notification handler event by id."
+      }
+    },
     "/nudge/projects/{projectId}/notification-handlers/{notificationHandlerId}/channel-templates/{templateId}": {
       "get": {
         "tags": [
@@ -8880,27 +10569,109 @@
                                           "type": "object",
                                           "required": [
                                             "title",
-                                            "body",
-                                            "clickAction"
+                                            "body"
                                           ],
                                           "properties": {
                                             "title": {
+                                              "minLength": 1,
                                               "type": "string"
                                             },
                                             "body": {
+                                              "minLength": 1,
                                               "type": "string"
                                             },
                                             "clickAction": {
+                                              "minLength": 1,
                                               "type": "string"
                                             },
+                                            "action": {
+                                              "anyOf": [
+                                                {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "type"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "const": "open",
+                                                      "type": "string"
+                                                    },
+                                                    "value": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "type",
+                                                    "value"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "const": "deeplink",
+                                                      "type": "string"
+                                                    },
+                                                    "value": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "type": "object",
+                                                  "required": [
+                                                    "type",
+                                                    "value"
+                                                  ],
+                                                  "properties": {
+                                                    "type": {
+                                                      "const": "url",
+                                                      "type": "string"
+                                                    },
+                                                    "value": {
+                                                      "minLength": 1,
+                                                      "type": "string"
+                                                    }
+                                                  }
+                                                }
+                                              ]
+                                            },
                                             "badge": {
-                                              "type": "string"
+                                              "anyOf": [
+                                                {
+                                                  "type": "number"
+                                                },
+                                                {
+                                                  "type": "string"
+                                                }
+                                              ]
                                             },
                                             "subtitle": {
                                               "type": "string"
                                             },
                                             "image": {
                                               "type": "string"
+                                            },
+                                            "sound": {
+                                              "const": "default",
+                                              "type": "string"
+                                            },
+                                            "collapseId": {
+                                              "minLength": 1,
+                                              "type": "string"
+                                            },
+                                            "ttl": {
+                                              "minimum": 0,
+                                              "type": "number"
+                                            },
+                                            "priority": {
+                                              "type": "string",
+                                              "enum": [
+                                                "normal",
+                                                "high"
+                                              ]
                                             },
                                             "payload": {
                                               "type": "object",
@@ -11648,29 +13419,37 @@
                               }
                             ]
                           },
-                          "iosDeviceTokens": {
+                          "pushContactPoints": {
                             "anyOf": [
                               {
                                 "type": "array",
                                 "items": {
-                                  "minLength": 1,
-                                  "pattern": "^(?!\\s*$)[^,]+$",
-                                  "type": "string"
-                                }
-                              },
-                              {
-                                "type": "null"
-                              }
-                            ]
-                          },
-                          "androidDeviceTokens": {
-                            "anyOf": [
-                              {
-                                "type": "array",
-                                "items": {
-                                  "minLength": 1,
-                                  "pattern": "^(?!\\s*$)[^,]+$",
-                                  "type": "string"
+                                  "type": "object",
+                                  "required": [
+                                    "provider",
+                                    "token"
+                                  ],
+                                  "properties": {
+                                    "provider": {
+                                      "type": "string",
+                                      "enum": [
+                                        "firebaseCloudMessaging",
+                                        "apns",
+                                        "expo"
+                                      ]
+                                    },
+                                    "token": {
+                                      "minLength": 1,
+                                      "type": "string"
+                                    },
+                                    "platform": {
+                                      "type": "string",
+                                      "enum": [
+                                        "ios",
+                                        "android"
+                                      ]
+                                    }
+                                  }
                                 }
                               },
                               {
@@ -12255,29 +14034,37 @@
                       }
                     ]
                   },
-                  "iosDeviceTokens": {
+                  "pushContactPoints": {
                     "anyOf": [
                       {
                         "type": "array",
                         "items": {
-                          "minLength": 1,
-                          "pattern": "^(?!\\s*$)[^,]+$",
-                          "type": "string"
-                        }
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "androidDeviceTokens": {
-                    "anyOf": [
-                      {
-                        "type": "array",
-                        "items": {
-                          "minLength": 1,
-                          "pattern": "^(?!\\s*$)[^,]+$",
-                          "type": "string"
+                          "type": "object",
+                          "required": [
+                            "provider",
+                            "token"
+                          ],
+                          "properties": {
+                            "provider": {
+                              "type": "string",
+                              "enum": [
+                                "firebaseCloudMessaging",
+                                "apns",
+                                "expo"
+                              ]
+                            },
+                            "token": {
+                              "minLength": 1,
+                              "type": "string"
+                            },
+                            "platform": {
+                              "type": "string",
+                              "enum": [
+                                "ios",
+                                "android"
+                              ]
+                            }
+                          }
                         }
                       },
                       {
@@ -12426,6 +14213,37 @@
                                   "type": "array",
                                   "items": {
                                     "type": "string"
+                                  }
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "required": [
+                                      "provider",
+                                      "token"
+                                    ],
+                                    "properties": {
+                                      "provider": {
+                                        "type": "string",
+                                        "enum": [
+                                          "firebaseCloudMessaging",
+                                          "apns",
+                                          "expo"
+                                        ]
+                                      },
+                                      "token": {
+                                        "minLength": 1,
+                                        "type": "string"
+                                      },
+                                      "platform": {
+                                        "type": "string",
+                                        "enum": [
+                                          "ios",
+                                          "android"
+                                        ]
+                                      }
+                                    }
                                   }
                                 },
                                 {
@@ -12638,7 +14456,9 @@
                           "attributeType",
                           "isNew",
                           "isValid",
-                          "isDuplicateSuggestion"
+                          "isDuplicateSuggestion",
+                          "isReservedImportField",
+                          "notes"
                         ],
                         "properties": {
                           "sourceFieldName": {
@@ -12680,6 +14500,15 @@
                           },
                           "isDuplicateSuggestion": {
                             "type": "boolean"
+                          },
+                          "isReservedImportField": {
+                            "type": "boolean"
+                          },
+                          "notes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           },
                           "validationReason": {
                             "minLength": 1,
