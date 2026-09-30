@@ -84,6 +84,36 @@ describe('OpenAPI schema adapter', () => {
     ]);
   });
 
+  it('does not require nested fields when their parent is optional', () => {
+    const fields = buildFieldsFromObjectSchema({
+      type: 'object',
+      properties: {
+        pushContactPoints: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['provider', 'token'],
+            properties: {
+              provider: { type: 'string' },
+              token: { type: 'string' },
+              platform: { type: 'string' },
+            },
+          },
+        },
+      },
+    });
+
+    expect(fields[0]).toMatchObject({
+      key: 'pushContactPoints',
+      required: false,
+      children: [
+        expect.objectContaining({ key: 'provider', required: false }),
+        expect.objectContaining({ key: 'token', required: false }),
+        expect.objectContaining({ key: 'platform', required: false }),
+      ],
+    });
+  });
+
   it('uses OpenAPI enum values as Zapier choices for params and body fields', () => {
     const searches = buildZapierSearchesFromOpenApi(spec, {
       operationIds: ['getPoolCustomerById'],
@@ -706,5 +736,125 @@ describe('OpenAPI schema adapter', () => {
     expect(updateRequests[0].body).toMatchObject({
       vipStatus: false,
     });
+  });
+
+  it('keeps flat push contact fields optional and converts them to the API array', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool', 'updateCustomerInPool'],
+    });
+    const authData = {
+      'x-client-key': 'client-key',
+      'x-client-secret': 'client-secret',
+    };
+
+    for (const create of Object.values(creates)) {
+      const pushContactPoints = create.operation.inputFields.find(
+        (field) =>
+          typeof field === 'object' && field.key === 'pushContactPoints',
+      );
+
+      expect(pushContactPoints.required).toBe(false);
+      expect(pushContactPoints.children).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ key: 'provider', required: false }),
+          expect.objectContaining({ key: 'token', required: false }),
+          expect.objectContaining({ key: 'platform', required: false }),
+        ]),
+      );
+    }
+
+    const cases = [
+      {
+        create: creates.add_customers_to_pool,
+        inputData: {
+          projectId: 'project-id',
+          customerPoolId: 'pool-id',
+          uniqueCustomerId: 'customer-1',
+          provider: 'firebaseCloudMessaging',
+          token: 'device-token',
+          platform: 'android',
+        },
+        expectedBody: {
+          customerData: {
+            uniqueCustomerId: 'customer-1',
+            pushContactPoints: [
+              {
+                provider: 'firebaseCloudMessaging',
+                token: 'device-token',
+                platform: 'android',
+              },
+            ],
+          },
+        },
+      },
+      {
+        create: creates.update_customer_in_pool,
+        inputData: {
+          projectId: 'project-id',
+          customerPoolId: 'pool-id',
+          customerId: 'customer-id',
+          provider: 'apns',
+          token: 'device-token',
+          platform: 'ios',
+        },
+        expectedBody: {
+          pushContactPoints: [
+            {
+              provider: 'apns',
+              token: 'device-token',
+              platform: 'ios',
+            },
+          ],
+        },
+      },
+    ];
+
+    for (const testCase of cases) {
+      const requests = [];
+      const z = {
+        request: jest.fn(async (options) => {
+          requests.push(options);
+          return {
+            json: { status: 'success', data: { id: 'customer-id' } },
+            data: { status: 'success', data: { id: 'customer-id' } },
+            throwForStatus: jest.fn(),
+          };
+        }),
+      };
+
+      await testCase.create.operation.perform(z, {
+        inputData: testCase.inputData,
+        authData,
+      });
+
+      expect(requests[0].body).toEqual(testCase.expectedBody);
+    }
+  });
+
+  it('rejects incomplete flat push contact fields before calling the API', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+    const z = {
+      request: jest.fn(),
+    };
+
+    await expect(
+      creates.add_customers_to_pool.operation.perform(z, {
+        inputData: {
+          projectId: 'project-id',
+          customerPoolId: 'pool-id',
+          uniqueCustomerId: 'customer-1',
+          provider: 'firebaseCloudMessaging',
+        },
+        authData: {
+          'x-client-key': 'client-key',
+          'x-client-secret': 'client-secret',
+        },
+      }),
+    ).rejects.toThrow(
+      'pushContactPoints requires token when a value is provided.',
+    );
+    expect(z.request).not.toHaveBeenCalled();
   });
 });

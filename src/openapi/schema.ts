@@ -99,11 +99,12 @@ const humanize = (value: string): string =>
     .trim()
     .replace(/\b\w/g, (character) => character.toUpperCase());
 
-export const buildFieldsFromObjectSchema = (
+const buildFields = (
   schema: JsonSchema | undefined,
   options: {
     exclude?: readonly string[];
-  } = {},
+  },
+  allowRequiredFields: boolean,
 ): GeneratedInputField[] => {
   const normalized = normalizeSchema(schema);
   const required = new Set(normalized.required ?? []);
@@ -115,10 +116,11 @@ export const buildFieldsFromObjectSchema = (
       const property = normalizeSchema(propertySchema);
       const type = readSchemaType(property);
       const itemSchema = normalizeSchema(property.items);
+      const isRequired = allowRequiredFields && required.has(key);
       const field: GeneratedInputField = {
         key,
         label: property.title ?? humanize(key),
-        required: required.has(key),
+        required: isRequired,
         type: mapFieldType(property),
         list: type === 'array',
       };
@@ -135,8 +137,10 @@ export const buildFieldsFromObjectSchema = (
       ) {
         delete field.type;
         delete field.list;
-        field.children = buildFieldsFromObjectSchema(
+        field.children = buildFields(
           type === 'array' ? itemSchema : property,
+          {},
+          isRequired,
         );
       }
 
@@ -149,6 +153,13 @@ export const buildFieldsFromObjectSchema = (
       return field;
     });
 };
+
+export const buildFieldsFromObjectSchema = (
+  schema: JsonSchema | undefined,
+  options: {
+    exclude?: readonly string[];
+  } = {},
+): GeneratedInputField[] => buildFields(schema, options, true);
 
 export const getJsonRequestSchema = (
   schemaContainer:

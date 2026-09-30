@@ -313,6 +313,30 @@ const buildValueFromSchema = (
     return inputData[key];
   }
 
+  if (normalized.type === 'array') {
+    const itemSchema = normalizeSchema(normalized.items);
+
+    if (itemSchema.type === 'object' || itemSchema.properties !== undefined) {
+      const item = buildObjectFromSchema(itemSchema, inputData, excluded);
+
+      if (item === undefined) {
+        return undefined;
+      }
+
+      const missingFields = (itemSchema.required ?? []).filter(
+        (fieldName) => !shouldIncludeValue(item[fieldName]),
+      );
+
+      if (missingFields.length > 0) {
+        throw new Error(
+          `${key} requires ${missingFields.join(' and ')} when a value is provided.`,
+        );
+      }
+
+      return [item];
+    }
+  }
+
   if (normalized.type === 'object' || normalized.properties !== undefined) {
     return buildObjectFromSchema(normalized, inputData, excluded);
   }

@@ -9,6 +9,27 @@ const CUSTOMER_ATTRIBUTE_OPERATION_IDS = new Set([
   'updateCustomerInPool',
 ]);
 
+const schemaPropertyKeys = (
+  schema: Parameters<typeof normalizeSchema>[0],
+): string[] => {
+  const normalized = normalizeSchema(schema);
+
+  return Object.entries(normalized.properties ?? {}).flatMap(
+    ([key, propertySchema]) => {
+      const property = normalizeSchema(propertySchema);
+      const item = normalizeSchema(property.items);
+      const nested = property.type === 'array' ? item : property;
+
+      return [
+        key,
+        ...(nested.type === 'object' || nested.properties !== undefined
+          ? schemaPropertyKeys(nested)
+          : []),
+      ];
+    },
+  );
+};
+
 const knownOperationFieldKeys = ({
   discovered,
 }: ZapierOperationPluginContext): Set<string> => {
@@ -25,7 +46,7 @@ const knownOperationFieldKeys = ({
     ...(discovered.operation.parameters ?? []).map(
       (parameter) => parameter.name,
     ),
-    ...Object.keys(bodySchema.properties ?? {}),
+    ...schemaPropertyKeys(bodySchema),
   ]);
 };
 
