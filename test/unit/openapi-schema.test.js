@@ -3,6 +3,7 @@ const { discoverZapierCreates } = require('../../src/zapier/actions');
 const { buildZapierCreatesFromOpenApi } = require('../../src/zapier/actions');
 const { buildZapierSearchesFromOpenApi } = require('../../src/zapier/searches');
 const { buildAuthentication } = require('../../src/zapier/authentication');
+const { buildDropdownTriggers } = require('../../src/zapier/triggers');
 const spec = require('../../src/api/index.json');
 
 describe('OpenAPI schema adapter', () => {
@@ -138,6 +139,7 @@ describe('OpenAPI schema adapter', () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['addCustomersToPool'],
     });
+    const triggers = buildDropdownTriggers(spec);
     const customerPoolField =
       creates.add_customers_to_pool.operation.inputFields.find(
         (field) => typeof field === 'object' && field.key === 'customerPoolId',
@@ -167,7 +169,7 @@ describe('OpenAPI schema adapter', () => {
       }),
     };
 
-    const choices = await customerPoolField.choices.perform(z, {
+    const choices = await triggers.customer_pools.operation.perform(z, {
       inputData: {
         projectId: 'project-id',
       },
@@ -178,6 +180,8 @@ describe('OpenAPI schema adapter', () => {
     });
 
     expect(customerPoolField.dependsOn).toEqual(['projectId']);
+    expect(customerPoolField.dynamic).toBe('customer_pools.id.name');
+    expect(customerPoolField.choices).toBeUndefined();
     expect(requests[0]).toMatchObject({
       method: 'GET',
       headers: {
@@ -188,26 +192,17 @@ describe('OpenAPI schema adapter', () => {
     expect(requests[0].url).toContain(
       '/customer/projects/project-id/customer-pools/',
     );
-    expect(choices).toEqual({
-      results: [
-        {
-          value: 'pool-1',
-          sample: 'pool-1',
-          label: 'Primary Pool',
-        },
-        {
-          value: 'pool-2',
-          sample: 'pool-2',
-          label: 'VIP Pool',
-        },
-      ],
-    });
+    expect(choices).toEqual([
+      { id: 'pool-1', name: 'Primary Pool' },
+      { id: 'pool-2', name: 'VIP Pool' },
+    ]);
   });
 
   it('loads projects as projectId dropdown choices from fixed service id', async () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['addCustomersToPool'],
     });
+    const triggers = buildDropdownTriggers(spec);
     const projectField =
       creates.add_customers_to_pool.operation.inputFields.find(
         (field) => typeof field === 'object' && field.key === 'projectId',
@@ -237,7 +232,7 @@ describe('OpenAPI schema adapter', () => {
       }),
     };
 
-    const choices = await projectField.choices.perform(z, {
+    const choices = await triggers.projects.operation.perform(z, {
       inputData: {},
       authData: {
         'x-client-key': 'client-key',
@@ -259,26 +254,19 @@ describe('OpenAPI schema adapter', () => {
     expect(requests[0].url).toContain(
       '/opm/members/me/projects/with-service/',
     );
-    expect(choices).toEqual({
-      results: [
-        {
-          value: 'project-1',
-          sample: 'project-1',
-          label: 'Main Project',
-        },
-        {
-          value: 'project-2',
-          sample: 'project-2',
-          label: 'Sandbox Project',
-        },
-      ],
-    });
+    expect(projectField.dynamic).toBe('projects.id.name');
+    expect(projectField.choices).toBeUndefined();
+    expect(choices).toEqual([
+      { id: 'project-1', name: 'Main Project' },
+      { id: 'project-2', name: 'Sandbox Project' },
+    ]);
   });
 
   it('loads target audience lists as targetAudienceListId dropdown choices', async () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['associateCustomerToTargetAudienceList'],
     });
+    const triggers = buildDropdownTriggers(spec);
     const field =
       creates.associate_customer_to_target_audience_list.operation.inputFields.find(
         (inputField) =>
@@ -305,7 +293,7 @@ describe('OpenAPI schema adapter', () => {
       }),
     };
 
-    const choices = await field.choices.perform(z, {
+    const choices = await triggers.target_audience_lists.operation.perform(z, {
       inputData: {
         projectId: 'project-id',
       },
@@ -314,11 +302,12 @@ describe('OpenAPI schema adapter', () => {
         'x-client-secret': 'client-secret',
       },
       meta: {
-        paging_token: '2',
+        page: 1,
       },
     });
 
     expect(field.dependsOn).toEqual(['projectId']);
+    expect(field.dynamic).toBe('target_audience_lists.id.name');
     expect(requests[0]).toMatchObject({
       method: 'GET',
       params: {
@@ -329,22 +318,16 @@ describe('OpenAPI schema adapter', () => {
     expect(requests[0].url).toContain(
       '/nudge/projects/project-id/target-audience-lists/',
     );
-    expect(choices).toEqual({
-      results: [
-        {
-          value: 'tal-1',
-          sample: 'tal-1',
-          label: 'High Intent Customers',
-        },
-      ],
-      paging_token: '3',
-    });
+    expect(choices).toEqual([
+      { id: 'tal-1', name: 'High Intent Customers' },
+    ]);
   });
 
   it('loads target audience lists as filterOutTALId dropdown choices', async () => {
     const searches = buildZapierSearchesFromOpenApi(spec, {
       operationIds: ['getPoolCustomers'],
     });
+    const triggers = buildDropdownTriggers(spec);
     const field = searches.get_pool_customers.operation.inputFields.find(
       (inputField) =>
         typeof inputField === 'object' && inputField.key === 'filterOutTALId',
@@ -369,7 +352,7 @@ describe('OpenAPI schema adapter', () => {
       }),
     };
 
-    const choices = await field.choices.perform(z, {
+    const choices = await triggers.target_audience_lists.operation.perform(z, {
       inputData: {
         projectId: 'project-id',
       },
@@ -381,6 +364,7 @@ describe('OpenAPI schema adapter', () => {
     });
 
     expect(field.dependsOn).toEqual(['projectId']);
+    expect(field.dynamic).toBe('target_audience_lists.id.name');
     expect(requests[0]).toMatchObject({
       method: 'GET',
       params: {
@@ -391,16 +375,9 @@ describe('OpenAPI schema adapter', () => {
     expect(requests[0].url).toContain(
       '/nudge/projects/project-id/target-audience-lists/',
     );
-    expect(choices).toEqual({
-      results: [
-        {
-          value: 'tal-1',
-          sample: 'tal-1',
-          label: 'High Intent Customers',
-        },
-      ],
-      paging_token: null,
-    });
+    expect(choices).toEqual([
+      { id: 'tal-1', name: 'High Intent Customers' },
+    ]);
   });
 
   it('keeps customerIds as a manual multi-value field', () => {
@@ -418,10 +395,92 @@ describe('OpenAPI schema adapter', () => {
     expect(field.dependsOn).toBeUndefined();
   });
 
+  it('uses the correct customer dropdown for pool and target-audience operations', async () => {
+    const searches = buildZapierSearchesFromOpenApi(spec, {
+      operationIds: ['getPoolCustomerById'],
+    });
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['deleteCustomerFromTargetAudienceList'],
+    });
+    const triggers = buildDropdownTriggers(spec);
+    const poolCustomerField =
+      searches.get_pool_customer_by_id.operation.inputFields.find(
+        (field) => typeof field === 'object' && field.key === 'customerId',
+      );
+    const targetAudienceCustomerField =
+      creates.delete_customer_from_target_audience_list.operation.inputFields.find(
+        (field) => typeof field === 'object' && field.key === 'customerId',
+      );
+    const requests = [];
+    const responseJson = {
+      status: 'success',
+      data: [
+        {
+          id: 'customer-id',
+          uniqueCustomerId: 'external-123',
+          name: 'Ada Lovelace',
+        },
+      ],
+      metaData: { hasMore: false },
+    };
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: responseJson,
+          data: responseJson,
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+    const authData = {
+      'x-client-key': 'client-key',
+      'x-client-secret': 'client-secret',
+    };
+
+    const poolCustomers = await triggers.pool_customers.operation.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+        customerPoolId: 'pool-id',
+      },
+      authData,
+      meta: {},
+    });
+    const targetAudienceCustomers =
+      await triggers.target_audience_customers.operation.perform(z, {
+        inputData: {
+          projectId: 'project-id',
+          targetAudienceListId: 'tal-id',
+        },
+        authData,
+        meta: {},
+      });
+
+    expect(poolCustomerField).toMatchObject({
+      dynamic: 'pool_customers.id.name',
+      dependsOn: ['projectId', 'customerPoolId'],
+    });
+    expect(targetAudienceCustomerField).toMatchObject({
+      dynamic: 'target_audience_customers.id.name',
+      dependsOn: ['projectId', 'targetAudienceListId'],
+    });
+    expect(requests[0].url).toContain(
+      '/customer/projects/project-id/customer-pools/pool-id/customers',
+    );
+    expect(requests[1].url).toContain(
+      '/nudge/projects/project-id/target-audience-lists/tal-id/customers',
+    );
+    expect(poolCustomers).toEqual([
+      { id: 'customer-id', name: 'Ada Lovelace (external-123)' },
+    ]);
+    expect(targetAudienceCustomers).toEqual(poolCustomers);
+  });
+
   it('loads notification handlers as notificationHandlerId dropdown choices', async () => {
     const creates = buildZapierCreatesFromOpenApi(spec, {
       operationIds: ['triggerNotificationHandler'],
     });
+    const triggers = buildDropdownTriggers(spec);
     const field =
       creates.trigger_notification_handler.operation.inputFields.find(
         (inputField) =>
@@ -460,7 +519,7 @@ describe('OpenAPI schema adapter', () => {
       }),
     };
 
-    const choices = await field.choices.perform(z, {
+    const choices = await triggers.notification_handlers.operation.perform(z, {
       inputData: {
         projectId: 'project-id',
       },
@@ -472,6 +531,7 @@ describe('OpenAPI schema adapter', () => {
     });
 
     expect(field.dependsOn).toEqual(['projectId']);
+    expect(field.dynamic).toBe('notification_handlers.id.name');
     expect(requests[0]).toMatchObject({
       method: 'GET',
       params: {
@@ -482,16 +542,9 @@ describe('OpenAPI schema adapter', () => {
     expect(requests[0].url).toContain(
       '/nudge/projects/project-id/notification-handlers/',
     );
-    expect(choices).toEqual({
-      results: [
-        {
-          value: 'row-1',
-          sample: 'row-1',
-          label: 'Welcome Email',
-        },
-      ],
-      paging_token: null,
-    });
+    expect(choices).toEqual([
+      { id: 'row-1', name: 'Welcome Email' },
+    ]);
   });
 
   it('uses global OpenAPI auth fields for generated requests', async () => {

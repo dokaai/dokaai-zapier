@@ -18,6 +18,7 @@ import {
 import { zapierDisplayForOperation } from '../display-overrides';
 import { getJsonRequestSchema, normalizeSchema } from '../../openapi/schema';
 import {
+  applyCustomerChoices,
   applyCustomerPoolChoices,
   applyNotificationHandlerChoices,
   applyProjectChoices,
@@ -113,9 +114,9 @@ const sampleFromOperation = (
 
 const parameterFields = (
   document: OpenApiDocument,
-  parameters: readonly OpenApiParameter[] | undefined,
+  operation: OpenApiOperation,
 ): GeneratedInputField[] =>
-  sortPriorityFieldsFirst((parameters ?? [])
+  sortPriorityFieldsFirst((operation.parameters ?? [])
     .filter((parameter) => parameter.in === 'path' || parameter.in === 'query')
     .map((parameter) => {
       const schema = normalizeSchema(parameter.schema);
@@ -147,7 +148,7 @@ const parameterFields = (
           .map((choice) => choice);
       }
 
-      return [
+      const fieldWithResourceChoices = [
         applyProjectChoices,
         applyCustomerPoolChoices,
         applyTargetAudienceListChoices,
@@ -155,6 +156,12 @@ const parameterFields = (
       ].reduce(
         (currentField, applyChoices) => applyChoices(document, currentField),
         field,
+      );
+
+      return applyCustomerChoices(
+        document,
+        fieldWithResourceChoices,
+        operation,
       );
     }));
 
@@ -353,7 +360,7 @@ export const buildZapierSearchesFromOpenApi = (
         operation: {
           perform: performSearch(document, discovered),
           inputFields: defineInputFields(
-            parameterFields(document, operation.parameters) as never,
+            parameterFields(document, operation) as never,
           ),
           sample: sampleFromOperation(operation),
         },

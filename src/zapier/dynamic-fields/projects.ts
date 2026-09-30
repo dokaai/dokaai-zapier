@@ -84,7 +84,7 @@ export const projectChoices =
   };
 
 export const applyProjectChoices = (
-  document: OpenApiDocument,
+  _document: OpenApiDocument,
   field: GeneratedInputField,
 ): GeneratedInputField => {
   if (field.key !== 'projectId') {
@@ -94,8 +94,6 @@ export const applyProjectChoices = (
   return {
     ...field,
     altersDynamicFields: true,
-    choices: {
-      perform: projectChoices(document),
-    },
+    dynamic: 'projects.id.name',
   };
 };

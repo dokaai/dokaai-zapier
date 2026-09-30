@@ -39,7 +39,7 @@ export const notificationHandlerChoices =
   };
 
 export const applyNotificationHandlerChoices = (
-  document: OpenApiDocument,
+  _document: OpenApiDocument,
   field: GeneratedInputField,
 ): GeneratedInputField => {
   if (field.key !== 'notificationHandlerId') {
@@ -49,8 +49,6 @@ export const applyNotificationHandlerChoices = (
   return {
     ...field,
     dependsOn: ['projectId'],
-    choices: {
-      perform: notificationHandlerChoices(document),
-    },
+    dynamic: 'notification_handlers.id.name',
   };
 };

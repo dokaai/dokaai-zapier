@@ -25,6 +25,7 @@ import {
   normalizeSchema,
 } from '../../openapi/schema';
 import {
+  applyCustomerChoices,
   applyCustomerPoolChoices,
   applyNotificationHandlerChoices,
   applyProjectChoices,
@@ -188,9 +189,9 @@ const sampleFromOperation = (
 
 const pathParameterFields = (
   document: OpenApiDocument,
-  parameters: readonly OpenApiParameter[] | undefined,
+  operation: OpenApiOperation,
 ): GeneratedInputField[] =>
-  (parameters ?? [])
+  (operation.parameters ?? [])
     .filter((parameter) => parameter.in === 'path' || parameter.in === 'query')
     .map((parameter) => {
       const schema = normalizeSchema(parameter.schema);
@@ -222,7 +223,7 @@ const pathParameterFields = (
           .map((choice) => choice);
       }
 
-      return [
+      const fieldWithResourceChoices = [
         applyProjectChoices,
         applyCustomerPoolChoices,
         applyTargetAudienceListChoices,
@@ -231,13 +232,20 @@ const pathParameterFields = (
         (currentField, applyChoices) => applyChoices(document, currentField),
         field,
       );
+
+      return applyCustomerChoices(
+        document,
+        fieldWithResourceChoices,
+        operation,
+      );
     });
 
 const applyGeneratedFieldChoices = (
   document: OpenApiDocument,
+  operation: OpenApiOperation,
   field: GeneratedInputField,
-): GeneratedInputField =>
-  [
+): GeneratedInputField => {
+  const fieldWithResourceChoices = [
     applyProjectChoices,
     applyCustomerPoolChoices,
     applyTargetAudienceListChoices,
@@ -246,6 +254,9 @@ const applyGeneratedFieldChoices = (
     (currentField, applyChoices) => applyChoices(document, currentField),
     field,
   );
+
+  return applyCustomerChoices(document, fieldWithResourceChoices, operation);
+};
 
 const buildInputFields = (
   document: OpenApiDocument,
@@ -273,9 +284,9 @@ const buildInputFields = (
   const bodyFields = buildFieldsFromObjectSchema(bodySchema, { exclude: excluded });
 
   return sortPriorityFieldsFirst([
-    ...pathParameterFields(document, operation.parameters),
+    ...pathParameterFields(document, operation),
     ...bodyFields.map(
-      (field) => applyGeneratedFieldChoices(document, field),
+      (field) => applyGeneratedFieldChoices(document, operation, field),
     ),
     ...plugins.flatMap((plugin) => plugin.inputFields?.(context) ?? []),
   ]);

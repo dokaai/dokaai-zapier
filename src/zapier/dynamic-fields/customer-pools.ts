@@ -77,7 +77,7 @@ export const customerPoolChoices =
   };
 
 export const applyCustomerPoolChoices = (
-  document: OpenApiDocument,
+  _document: OpenApiDocument,
   field: GeneratedInputField,
 ): GeneratedInputField => {
   if (field.key !== 'customerPoolId') {
@@ -88,8 +88,6 @@ export const applyCustomerPoolChoices = (
     ...field,
     dependsOn: ['projectId'],
     altersDynamicFields: true,
-    choices: {
-      perform: customerPoolChoices(document),
-    },
+    dynamic: 'customer_pools.id.name',
   };
 };

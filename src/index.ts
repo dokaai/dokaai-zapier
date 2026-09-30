@@ -5,6 +5,7 @@ import type { OpenApiDocument } from './openapi/types';
 import { buildZapierCreatesFromOpenApi } from './zapier/actions';
 import { buildAuthentication } from './zapier/authentication';
 import { buildZapierSearchesFromOpenApi } from './zapier/searches';
+import { buildDropdownTriggers } from './zapier/triggers';
 import {
   zapierActionOperationIds,
   zapierSearchOperationIds,
@@ -21,6 +22,7 @@ const app = defineApp({
   authentication: buildAuthentication(openApiSpec, {
     operationIds: zapierActionOperationIds,
   }),
+  triggers: buildDropdownTriggers(openApiSpec),
   creates: buildZapierCreatesFromOpenApi(openApiSpec, {
     operationIds: zapierActionOperationIds,
   }),

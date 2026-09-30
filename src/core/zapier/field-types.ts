@@ -15,6 +15,8 @@ export interface ZapierInputField {
   required?: boolean;
   list?: boolean;
   altersDynamicFields?: boolean;
+  dynamic?: string;
+  resource?: string;
   choices?: unknown;
   dependsOn?: string[];
   children?: ZapierInputField[];

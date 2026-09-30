@@ -21,7 +21,7 @@ export const targetAudienceListChoices =
   };
 
 export const applyTargetAudienceListChoices = (
-  document: OpenApiDocument,
+  _document: OpenApiDocument,
   field: GeneratedInputField,
 ): GeneratedInputField => {
   if (field.key !== 'targetAudienceListId' && field.key !== 'filterOutTALId') {
@@ -32,8 +32,6 @@ export const applyTargetAudienceListChoices = (
     ...field,
     dependsOn: ['projectId'],
     altersDynamicFields: true,
-    choices: {
-      perform: targetAudienceListChoices(document),
-    },
+    dynamic: 'target_audience_lists.id.name',
   };
 };

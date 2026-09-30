@@ -32,10 +32,15 @@ type PaginatedChoiceOptions = {
 };
 
 const readPage = (bundle: Bundle): number => {
-  const rawPage = bundle.meta?.paging_token ?? bundle.meta?.page ?? 1;
-  const page = Number(rawPage);
+  const pagingToken = Number(bundle.meta?.paging_token);
 
-  return Number.isFinite(page) && page > 0 ? page : 1;
+  if (Number.isFinite(pagingToken) && pagingToken > 0) {
+    return pagingToken;
+  }
+
+  const pageIndex = Number(bundle.meta?.page);
+
+  return Number.isFinite(pageIndex) && pageIndex >= 0 ? pageIndex + 1 : 1;
 };
 
 const readSearch = (bundle: Bundle): string | undefined => {
