@@ -309,32 +309,53 @@ const buildValueFromSchema = (
 ): unknown => {
   const normalized = normalizeSchema(schema);
 
-  if (Object.hasOwn(inputData, key)) {
-    return inputData[key];
-  }
-
   if (normalized.type === 'array') {
     const itemSchema = normalizeSchema(normalized.items);
 
     if (itemSchema.type === 'object' || itemSchema.properties !== undefined) {
-      const item = buildObjectFromSchema(itemSchema, inputData, excluded);
+      const hasStructuredValue = Object.hasOwn(inputData, key);
+      const rawValue = inputData[key];
+      const itemInputs = hasStructuredValue
+        ? (Array.isArray(rawValue) ? rawValue : [rawValue]).flatMap(
+            (itemInput) => {
+              if (!shouldIncludeValue(itemInput)) {
+                return [];
+              }
 
-      if (item === undefined) {
-        return undefined;
-      }
+              if (!isRecord(itemInput)) {
+                throw new Error(`${key} must contain objects.`);
+              }
 
-      const missingFields = (itemSchema.required ?? []).filter(
-        (fieldName) => !shouldIncludeValue(item[fieldName]),
-      );
+              return [itemInput];
+            },
+          )
+        : [inputData];
+      const items = itemInputs.flatMap((itemInput) => {
+        const item = buildObjectFromSchema(itemSchema, itemInput, excluded);
 
-      if (missingFields.length > 0) {
-        throw new Error(
-          `${key} requires ${missingFields.join(' and ')} when a value is provided.`,
+        if (item === undefined) {
+          return [];
+        }
+
+        const missingFields = (itemSchema.required ?? []).filter(
+          (fieldName) => !shouldIncludeValue(item[fieldName]),
         );
-      }
 
-      return [item];
+        if (missingFields.length > 0) {
+          throw new Error(
+            `${key} requires ${missingFields.join(' and ')} when a value is provided.`,
+          );
+        }
+
+        return [item];
+      });
+
+      return items.length > 0 ? items : undefined;
     }
+  }
+
+  if (Object.hasOwn(inputData, key)) {
+    return inputData[key];
   }
 
   if (normalized.type === 'object' || normalized.properties !== undefined) {

@@ -857,4 +857,79 @@ describe('OpenAPI schema adapter', () => {
     );
     expect(z.request).not.toHaveBeenCalled();
   });
+
+  it('omits an empty structured push contact item', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+    const requests = [];
+    const z = {
+      request: jest.fn(async (options) => {
+        requests.push(options);
+        return {
+          json: { status: 'success', data: { customerId: 'customer-id' } },
+          data: { status: 'success', data: { customerId: 'customer-id' } },
+          throwForStatus: jest.fn(),
+        };
+      }),
+    };
+
+    await creates.add_customers_to_pool.operation.perform(z, {
+      inputData: {
+        projectId: 'project-id',
+        customerPoolId: 'pool-id',
+        uniqueCustomerId: 'customer-1',
+        pushContactPoints: [
+          {
+            provider: '',
+            token: '',
+            platform: '',
+          },
+        ],
+      },
+      authData: {
+        'x-client-key': 'client-key',
+        'x-client-secret': 'client-secret',
+      },
+    });
+
+    expect(requests[0].body).toEqual({
+      customerData: {
+        uniqueCustomerId: 'customer-1',
+      },
+    });
+  });
+
+  it('rejects an incomplete structured push contact before calling the API', async () => {
+    const creates = buildZapierCreatesFromOpenApi(spec, {
+      operationIds: ['addCustomersToPool'],
+    });
+    const z = {
+      request: jest.fn(),
+    };
+
+    await expect(
+      creates.add_customers_to_pool.operation.perform(z, {
+        inputData: {
+          projectId: 'project-id',
+          customerPoolId: 'pool-id',
+          uniqueCustomerId: 'customer-1',
+          pushContactPoints: [
+            {
+              provider: 'firebaseCloudMessaging',
+              token: '',
+              platform: 'android',
+            },
+          ],
+        },
+        authData: {
+          'x-client-key': 'client-key',
+          'x-client-secret': 'client-secret',
+        },
+      }),
+    ).rejects.toThrow(
+      'pushContactPoints requires token when a value is provided.',
+    );
+    expect(z.request).not.toHaveBeenCalled();
+  });
 });
